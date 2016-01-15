@@ -55,9 +55,7 @@
 
 
 #if defined(__linux__)
-#if defined(__GLIBC__) && ((__GLIBC__>2)||(__GLIBC__==2 && __GLIBC_MINOR__>=1))
 #define HAVE_GETADDRINFO	1
-#endif
 #endif
 
 #if defined(__DragonFly__)
