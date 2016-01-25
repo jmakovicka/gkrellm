@@ -39,7 +39,7 @@ include configure.mk
 
 # Only use own md5-code if neither OpenSSL nor GnuTLS are present
 ifneq ($(HAVE_SSL),1)
-    EXTRAOBJS ?= md5c.o
+    EXTRAOBJS += md5c.o
 endif
 
 GKRELLM_INCLUDES = gkrellm.h gkrellm-public-proto.h $(SHARED_PATH)/log.h
