@@ -412,6 +412,7 @@ static struct _disk_name_map
 	{"cc5d", COMPAQ_CISS_MAJOR + 5,		16,	'0' },	/* 109:  c5d0-c5d15 */
 	{"cc6d", COMPAQ_CISS_MAJOR + 6,		16,	'0' },	/* 110:  c6d0-c6d15 */
 	{"cc7d", COMPAQ_CISS_MAJOR + 7,		16,	'0' },	/* 111:  c7d0-c7d15 */
+
 	{"dm-",  DM_MAJOR,              	256, '0' },	/* 254:  dm-0 - dm-255 */
 
 	{"fd",	FLOPPY_MAJOR,				0,	'0' }	/* 2:  fd0-fd3  */
@@ -499,7 +500,8 @@ disk_get_device_name(gint major, gint minor, gchar *disk, gchar *partition)
 	struct _disk_name_map	*dm	= NULL;
 	gint					i, unit = 0;
 	gchar					*p, *d;
-		
+	gboolean				valid_partition_number = FALSE;
+
 	for (p = partition; *p; ++p)
 		if (*p == '/')
 			break;
@@ -509,7 +511,16 @@ disk_get_device_name(gint major, gint minor, gchar *disk, gchar *partition)
 		p = partition;
 		while (*d && *p && *d++ == *p++)
 			;
-		if (d == disk || *d || *p < '0' || *p > '9')
+
+		/* Check that p points to valid partition number.  Should be a digit
+		|  unless disk is mmcblkN where the partition number has a leading 'p'
+		*/
+		if (*p == 'p' && !strncmp(partition, "mmcblk", 6))
+			++p;
+		if (*p >= '0' && *p <= '9')
+			valid_partition_number = TRUE;
+
+		if (d == disk || *d || !valid_partition_number)
 			{
 			strcpy(disk, partition);
 			partition[0] = '\0';
@@ -596,6 +607,7 @@ linux_read_proc_diskstats(void)
 		   )
 			continue;
 		is_MD = (major == MD_MAJOR);
+
 		if (part[0] == '\0')
 			gkrellm_disk_assign_data_by_name(disk, 512 * rd, 512 * wr, is_MD);
 		else

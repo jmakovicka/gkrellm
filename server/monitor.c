@@ -537,6 +537,8 @@ gkrellm_disk_subdisk_assign_data_by_name(gchar *subdisk_name, gchar *disk_name,
 		|  appended.  Eg. "hda1" is a subdisk_name of disk_name "hda"
 		*/
 		s = subdisk_name + strlen(disk_name);
+		if (*s == 'p')	/* except mmcblkN SD disks have "pN" partition numbers */
+			++s;
 		subdisk = strtol(s, &endptr, 0);
 		if (!*s || *endptr)
 			return;
