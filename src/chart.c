@@ -267,6 +267,16 @@ gkrellm_set_chartdata_flags(GkrellmChartdata *cd, gint flags)
 		cd->flags = flags;
 	}
 
+static void
+gk_draw_vertical_line(GdkDrawable *drawable, GdkGC *gc, gint x, gint y1, gint y2)
+	{
+	if (y1 == y2)
+		gdk_draw_point(drawable, gc, x, y1);
+	else
+		gdk_draw_line(drawable, gc, x, y1, x, y2);
+	}
+
+
 static gint
 chartdata_ycoord(GkrellmChart *cp, GkrellmChartdata *cd, gint yd)
 	{
@@ -413,7 +423,7 @@ draw_chartdata_impulses(GkrellmChart *cp, GList *cd_list,
 				yI += cd->data[x];
 				y = chartdata_ycoord(cp, cd, yI);
 				if (cd->data[x] > 0)
-					gdk_draw_line(cd->data_bitmap, _GK.bit1_GC, n, y1, n, y);
+					gk_draw_vertical_line(cd->data_bitmap, _GK.bit1_GC, n, y1, y);
 				y1 = y;
 				}
 			else
@@ -423,7 +433,7 @@ draw_chartdata_impulses(GkrellmChart *cp, GList *cd_list,
 				yN += cd->data[x];
 				y = chartdata_ycoord(cp, cd, yN);
 				if (cd->data[x] > 0)
-					gdk_draw_line(cd->data_bitmap, _GK.bit1_GC, n, y0, n, y);
+					gk_draw_vertical_line(cd->data_bitmap, _GK.bit1_GC, n, y0, y);
 				y0 = y;
 				}
 			}
@@ -501,11 +511,7 @@ draw_chartdata_lines(GkrellmChart *cp, GkrellmChartdata *cd, gint i0)
 		cd->y_p_valid = FALSE;	/* Need a store_chartdata to make it valid */
 		if (cd->data[x] > 0 || (cd->inverted ? (y > y0) : (y < y0)))
 			{
-			if (y == y1)
-				gdk_draw_point(cd->data_bitmap, _GK.bit1_GC, cp->x + n, y1);
-			else
-				gdk_draw_line(cd->data_bitmap, _GK.bit1_GC,
-						cp->x + n, y, cp->x + n, y1);
+			gk_draw_vertical_line(cd->data_bitmap, _GK.bit1_GC, cp->x + n, y, y1);
 			}
 		}
 	/* Push the grided pixmap through the data bitmap onto the expose pixmap
