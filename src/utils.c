@@ -527,3 +527,8 @@ gkrellm_locale_dup_string(gchar **dst_utf8, gchar *src, gchar **dst_locale)
 	return TRUE;
 	}
 
+guint
+big_endian_uint(guint8 *b)
+	{
+	return ((b[0] << 24) | (b[1] << 16) | (b[2] << 8) | b[3]);
+	}

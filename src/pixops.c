@@ -672,8 +672,23 @@ gkrellm_piximage_new_from_inline(const guint8 *data, gboolean copy_pixels)
 	{
 	GkrellmPiximage	*piximage;
 	GdkPixbuf		*pixbuf;
+	guint			width, height, stride;
+	guint8			*d = (guint8 *) data;
+	gpointer		pixels;
 
-	pixbuf = gdk_pixbuf_new_from_inline(-1, data, copy_pixels, NULL);
+
+//	pixbuf = gdk_pixbuf_new_from_inline(-1, data, copy_pixels, NULL);
+	stride = big_endian_uint(d + 12);
+	width  = big_endian_uint(d + 16);
+	height = big_endian_uint(d + 20);
+
+	pixels = g_memdup((gconstpointer)(d + 24), height * stride);
+
+	pixbuf = gdk_pixbuf_new_from_data(pixels,
+				GDK_COLORSPACE_RGB, TRUE, 8, width, height, stride,
+				(GdkPixbufDestroyNotify) g_free, pixels);
+
+
  	if (!pixbuf)
 		return NULL;
 	piximage = g_new0(GkrellmPiximage, 1);

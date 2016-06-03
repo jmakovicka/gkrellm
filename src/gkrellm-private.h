@@ -513,5 +513,4 @@ enum GkrellmConnectState
 			gkrellm_client_server_connect_state(void);
 void		gkrellm_client_mode_connect_thread(void);
 gint		gkrellm_client_server_get_net_timer(void);
-
-
+guint		big_endian_uint(guint8 *b);

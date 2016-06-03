@@ -1319,8 +1319,9 @@ gkrellmd_run(gint argc, gchar **argv)
 				if (!client)
 					{
 #if defined(WIN32)
-				closesocket(client_fd);
+					closesocket(client_fd);
 #else
+					shutdown(client_fd, SHUT_WR);
 					close(client_fd);
 #endif
 					continue;

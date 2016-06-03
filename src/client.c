@@ -1418,6 +1418,18 @@ client_monitor_setup(gchar *line)
 static void
 client_server_error(gchar *line)
 	{
+	GtkWidget	*dlg;
+
+	dlg = gtk_message_dialog_new(NULL, GTK_DIALOG_MODAL,
+				GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE,
+				"GKrellM - connection refused from gkrellmd at %s:%d\n"
+				"\t%s\n\n"
+				"Edit gkrellmd.conf on %s to set:\n"
+				"\tmax-clents, allow-host, etc\n",
+				_GK.server, _GK.server_port, line, _GK.server);
+				gtk_dialog_run(GTK_DIALOG(dlg));
+	gtk_widget_destroy(dlg);
+
 	fprintf(stderr, "gkrellmd error: %s\n", line);
 	exit(0);
 	}
