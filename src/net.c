@@ -91,6 +91,7 @@ typedef struct
 
 	GkrellmChartconfig	*chart_config;
 	gboolean			enabled,
+						ignore,
 						chart_labels,
 						force_up,
 						real;
@@ -155,6 +156,7 @@ static GList	*net_mon_sys_list;
 static GList	*timer_defaults_list;
 static gchar	*lock_directory;
 static gchar	*net_data_dir;
+static gchar	*net_ignore_patterns;
 
 static void		(*read_net_data)();
 static void		(*check_net_routes)();
@@ -167,6 +169,7 @@ static gint		reset_mday;
 
 static gboolean		net_enabled_as_default;
 static GtkWidget	*net_enabled_as_default_button;
+
 
 static gint
 strcmp_net_name(NetMon *net1, NetMon *net2)
@@ -193,16 +196,53 @@ strcmp_net_name(NetMon *net1, NetMon *net2)
 	return n;
 	}
 
+static gboolean
+net_ignore_match(gchar *name)
+	{
+	GMatchInfo	*match_info;
+	GRegex		*regex;
+	gchar		*s, buf[128];
+
+	for (s = net_ignore_patterns; *s; )
+		{
+		while (*s == ' ')
+			++s;
+		if (sscanf(s, "%s", buf) == 1)
+			{
+			regex = g_regex_new(buf, G_REGEX_ANCHORED, 0, NULL);
+			if (regex)
+				{
+				g_regex_match(regex, name, 0, &match_info);
+				if (g_match_info_matches(match_info))
+					{
+					g_match_info_free(match_info);
+					g_regex_unref(regex);
+					return TRUE;
+					}
+				g_match_info_free(match_info);
+				g_regex_unref(regex);
+				}
+			}
+		while (*s != ' ' && *s != '\0')
+			++s;
+		}
+	return FALSE;
+	}
+
 static NetMon *
 new_net(gchar *name)
 	{
-	NetMon		*net;
-
+	NetMon	*net;
+	
 	net = g_new0(NetMon, 1);
 	net->name = g_strdup(name);
 	if (strcmp(name, "lo"))		/* lo is disabled by default */
 		net->enabled = net_enabled_as_default;		/* All others are enabled unless unset in configuration */
-
+	if (net_ignore_match(name))
+		{
+		net->ignore = TRUE;
+		net->enabled = FALSE;
+		}
 	net->chart_labels = TRUE;
 	net->label = g_strdup("");
 	net->launch.command = g_strdup("");
@@ -303,6 +343,9 @@ gkrellm_net_routed_event(gchar *name, gboolean routed)
 		return;
 	if ((net = lookup_net(name)) == NULL)
 		net = new_net(name);
+	if (!net)
+		return;
+
 	if (routed)
 		net->up_event = TRUE;
 	else
@@ -318,6 +361,9 @@ gkrellm_net_assign_data(gchar *name, gulong rx, gulong tx)
 
 	if ((net = lookup_net(name)) == NULL)
 		net = new_net(name);
+	if (!net || net->ignore)
+		return;
+
 	if (GK.second_tick && !net_use_routed)
 		net->up = TRUE;
 	net->rx = rx;
@@ -2075,6 +2121,8 @@ update_net(void)
 			for (list = net_mon_list; list; list = list->next)
 				{
 				net = (NetMon *) list->data;
+				if (net->ignore)
+					continue;
 				net->up_prev = net->up;
 				net->up = FALSE;
 				}
@@ -2088,6 +2136,8 @@ update_net(void)
 		for (list = net_mon_list; list; list = list->next)
 			{
 			net = (NetMon *) list->data;
+			if (net->ignore)
+				continue;
 			if (net->up && !net->up_prev)
 				net->up_event = TRUE;
 			else if (!net->up && net->up_prev)
@@ -2097,7 +2147,7 @@ update_net(void)
 	for (list = net_mon_list; list; list = list->next)
 		{
 		net = (NetMon *) list->data;
-		if (!net->chart)
+		if (!net->chart || net->ignore)
 			continue;
 		p = net->chart->panel;
 		if (net->up || net->force_up)
@@ -2175,6 +2225,8 @@ update_net(void)
 		for (list = net_mon_list; list; list = list->next)
 			{
 			net = (NetMon *) list->data;
+			if (net->ignore)
+				continue;
 			if (!net->locked)
 				{
 				if (net->up_event && !net->chart && net->enabled)
@@ -2440,7 +2492,7 @@ save_net_config(FILE *f)
 	for (list = net_mon_list; list; list = list->next)
 		{
 		net = (NetMon *) list->data;
-		if (!net->enabled  && !net->real)
+		if ((!net->enabled  && !net->real) || net->ignore)
 			continue;
 		fprintf(f, "%s enables %s %d %d %d\n", NET_CONFIG_KEYWORD, net->name,
 				net->enabled, net->chart_labels, net->force_up);
@@ -2465,6 +2517,9 @@ save_net_config(FILE *f)
 			}
 		}
 
+	if (*net_ignore_patterns)
+		fprintf(f, "%s ignore_patterns %s\n", NET_CONFIG_KEYWORD, net_ignore_patterns);
+
 	if (!_GK.client_mode || timer_button_type != TIMER_TYPE_SERVER)
 		fprintf(f, "%s timer_enabled %d\n", NET_CONFIG_KEYWORD,
 						timer_button_enabled);
@@ -2474,7 +2529,8 @@ save_net_config(FILE *f)
 				timer_button_iface);
 	fprintf(f, "%s timer_on %s\n", NET_CONFIG_KEYWORD, timer_on_command);
 	fprintf(f, "%s timer_off %s\n", NET_CONFIG_KEYWORD, timer_off_command);
-	fprintf(f, "%s text_format %s\n", NET_CONFIG_KEYWORD, text_format);
+	if (*text_format)
+		fprintf(f, "%s text_format %s\n", NET_CONFIG_KEYWORD, text_format);
 	fprintf(f, "%s reset_mday %d\n", NET_CONFIG_KEYWORD, reset_mday);
 	fprintf(f, "%s net_enabled_as_default %d\n", NET_CONFIG_KEYWORD, net_enabled_as_default);
 	fprintf(f, "%s net_stats_window_height %d\n", NET_CONFIG_KEYWORD,
@@ -2519,6 +2575,8 @@ load_net_config(gchar *arg)
 		gkrellm_dup_string(&timer_off_command, item);
 	else if (!strcmp(config, "text_format"))
 		gkrellm_locale_dup_string(&text_format, item, &text_format_locale);
+	else if (!strcmp(config, "ignore_patterns"))
+		gkrellm_dup_string(&net_ignore_patterns, item);
 	else if (sscanf(item, "%31s %[^\n]", name, item1) == 2)
 		{
 		if (!strcmp(config, "iface"))	/* Hack to get some of 1.0 config */
@@ -2533,13 +2591,16 @@ load_net_config(gchar *arg)
 			{
 			if ((net = lookup_net(name)) == NULL)
 				net = new_net(name);
-			sscanf(item1, "%d %d %d", &net->enabled, &net->chart_labels,
-						&net->force_up);
-			if (!net_use_routed)
-				net->force_up = FALSE;
+			if (net && !net->ignore)
+				{
+				sscanf(item1, "%d %d %d", &net->enabled, &net->chart_labels,
+							&net->force_up);
+				if (!net_use_routed)
+					net->force_up = FALSE;
+				}
 			return;
 			}
-		if ((net = lookup_net(name)) == NULL)
+		if ((net = lookup_net(name)) == NULL || net->ignore)
 			return;
 		if (!strcmp(config, GKRELLM_CHARTCONFIG_KEYWORD))
 			gkrellm_load_chartconfig(&net->chart_config, item1, 2);
@@ -2567,6 +2628,7 @@ load_net_config(gchar *arg)
 
 static GtkWidget	*pon_entry,
 					*poff_entry,
+					*net_ignore_entry,
 					*timer_iface_combo_box,
 					*text_format_combo_box;
 
@@ -2792,7 +2854,7 @@ cb_timer_iface(GtkWidget *widget, gpointer data)
 
 	entry = gtk_bin_get_child(GTK_BIN(timer_iface_combo_box));
 	s = gkrellm_gtk_entry_get_text(&entry);
-	if (*s == '\0' || strcmp(s, _("none")) == 0)
+	if (*s == '\0' || strcmp(s, _("none")) == 0 || net_ignore_match(s))
 		s = "none";
 	if (gkrellm_dup_string(&timer_button_iface, s))
 		{
@@ -2886,6 +2948,51 @@ static void
 cb_net_enabled_as_default(GtkWidget *button, gpointer data)
 	{
 	net_enabled_as_default = GTK_TOGGLE_BUTTON(button)->active;
+	}
+
+static void
+net_ignore_entry_cb(GtkWidget *widget, gpointer data)
+	{
+	NetMon	*net;
+	GList	*list;
+	gchar	*str = gkrellm_gtk_entry_get_text(&net_ignore_entry);
+	gboolean prev_ignore;
+
+	gkrellm_dup_string(&net_ignore_patterns, str);
+	for (list = net_mon_list; list; list = list->next)
+		{
+		net = (NetMon *) list->data;
+		prev_ignore = net->ignore;
+		net->ignore = net_ignore_match(net->name);
+		if (net->ignore && !prev_ignore)
+			{
+			net->enabled = FALSE;
+			sync_chart(net);
+			net_spacer_visibility();
+			}
+		else if (!net->ignore && prev_ignore)
+			{
+			net->enabled = net_enabled_as_default;
+			sync_chart(net);
+			net_spacer_visibility();
+			}
+		if (net->force_button)
+			{
+			if (net->enabled)
+				gtk_widget_set_sensitive(net->force_button, TRUE);
+			else
+				{
+				gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(net->force_button),
+							FALSE);
+				gtk_widget_set_sensitive(net->force_button, FALSE);
+				net->force_up = FALSE;
+				}
+			}
+		if (net->alert_button)
+			gtk_widget_set_sensitive(net->alert_button, net->enabled);
+		if (net == net_timed && !net->enabled && timer_iface_combo_box)
+			gtk_combo_box_set_active(GTK_COMBO_BOX(timer_iface_combo_box), 0);
+		}
 	}
 
 #if !defined(WIN32)
@@ -3032,7 +3139,12 @@ create_net_tab(GtkWidget *tab_vbox)
 	for (list = net_mon_list; list; list = list->next)
 		{
 		net = (NetMon *) list->data;
-
+		if (net->ignore)
+			{
+			net->alert_button = NULL;
+			net->force_button = NULL;
+			continue;
+			}
 		vbox = gkrellm_gtk_framed_notebook_page(tabs, net->name);
 
 		snprintf(buf, sizeof(buf), _("Enable %s"), net->name);
@@ -3106,6 +3218,24 @@ create_net_tab(GtkWidget *tab_vbox)
 		text_format);
 	g_signal_connect(G_OBJECT(GTK_COMBO_BOX(text_format_combo_box)), "changed",
 			G_CALLBACK(cb_text_format), NULL);
+
+	vbox1 = gkrellm_gtk_category_vbox(vbox,
+				_("Ignore Net Interfaces"),
+				4, 0, TRUE);
+	label = gtk_label_new(_("Space separated list of patterns.\n"));
+	gtk_label_set_justify(GTK_LABEL(label), GTK_JUSTIFY_LEFT);
+	hbox = gtk_hbox_new(FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(vbox1), hbox, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
+
+	hbox = gtk_hbox_new(FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(vbox1), hbox, FALSE, FALSE, 0);
+	net_ignore_entry = gtk_entry_new();
+	snprintf(buf, sizeof(buf), "%s", net_ignore_patterns);
+	gtk_entry_set_text(GTK_ENTRY(net_ignore_entry), buf);
+	gtk_box_pack_start(GTK_BOX(hbox), net_ignore_entry, FALSE, FALSE, 0);
+	g_signal_connect(G_OBJECT(net_ignore_entry), "changed",
+			G_CALLBACK(net_ignore_entry_cb), NULL);
 
 	gkrellm_gtk_spin_button(vbox, NULL, (gfloat) reset_mday,
 			1.0, 31.0, 1.0, 1.0, 0, 55,
@@ -3186,6 +3316,7 @@ gkrellm_init_net_monitor(void)
 
 	gkrellm_locale_dup_string(&text_format, DEFAULT_TEXT_FORMAT,
 					&text_format_locale);
+	gkrellm_dup_string(&net_ignore_patterns, "");
 
 	net_stats_window_height = 200;
 
