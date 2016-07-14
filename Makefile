@@ -131,13 +131,13 @@ all gkrellm: gkrellm.pc
 	(cd server && ${MAKE} gkrellmd)
 
 gkrellm.pc: Makefile
-	echo 'prefix=$(INSTALLROOT)\n'\
-	'Name: GKrellM\n'\
-	'Description: Extensible GTK system monitoring application\n'\
-	'Version: $(VERSION)\n'\
-	'Requires: gtk+-2.0 >= 2.4.0\n'\
-	'Cflags: -I$(INCLUDEDIR)\n'\
-	'$(GKRELLM_PC_EXTRA)' > gkrellm.pc
+	echo 'prefix=$(INSTALLROOT)' > gkrellm.pc
+	echo 'Name: GKrellM' >> gkrellm.pc
+	echo 'Description: Extensible GTK system monitoring application' >> gkrellm.pc
+	echo 'Version: $(VERSION)' >> gkrellm.pc
+	echo 'Requires: gtk+-2.0 >= 2.4.0' >> gkrellm.pc
+	echo 'Cflags: -I$(INCLUDEDIR)' >> gkrellm.pc
+	echo '$(GKRELLM_PC_EXTRA)' >> gkrellm.pc
 
 install: install_gkrellm.pc
 	(cd po && ${MAKE} install)
@@ -269,7 +269,7 @@ gnome-gtop: gkrellm.pc
 		GTOP_INCLUDE="\`gnome-config --cflags libgtop\`" \
 		GTOP_LIBS_D="\`gnome-config --libs libgtop\`" \
 		SYS_LIBS= gkrellmd )
- 
+
 gtop: gkrellm.pc
 	(cd po && ${MAKE} all)
 	(cd src && ${MAKE} GTOP_INCLUDE="\`libgtop-config --cflags\`" \
