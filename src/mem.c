@@ -708,16 +708,16 @@ create_chart(MeminfoChart *mc, gint first_create)
 	mc->out_cd = gkrellm_add_default_chartdata(cp, _("Swap Out"));
 	mc->in_cd = gkrellm_add_default_chartdata(cp, _("Swap In"));
 	gkrellm_set_draw_chart_function(cp, refresh_chart, mc);
-    gkrellm_chartconfig_fixed_grids_connect(cp->config,
-                setup_scaling, mc);
-    gkrellm_chartconfig_grid_resolution_connect(cp->config,
-                setup_scaling, mc);
-    gkrellm_chartconfig_grid_resolution_adjustment(cp->config, TRUE,
-                0, (gfloat) MIN_GRID_RES, (gfloat) MAX_GRID_RES, 0, 0, 0, 70);
-    gkrellm_chartconfig_grid_resolution_label(cp->config,
-                _("Swap in/out pages per sec"));
-    if (gkrellm_get_chartconfig_grid_resolution(cp->config) < MIN_GRID_RES)
-        gkrellm_set_chartconfig_grid_resolution(cp->config, DEFAULT_GRID_RES);
+	gkrellm_chartconfig_fixed_grids_connect(cp->config,
+		setup_scaling, mc);
+	gkrellm_chartconfig_grid_resolution_connect(cp->config,
+		setup_scaling, mc);
+	gkrellm_chartconfig_grid_resolution_adjustment(cp->config, TRUE,
+		0, (gfloat) MIN_GRID_RES, (gfloat) MAX_GRID_RES, 0, 0, 0, 70);
+	gkrellm_chartconfig_grid_resolution_label(cp->config,
+	        _("Swap in/out pages per sec"));
+	if (gkrellm_get_chartconfig_grid_resolution(cp->config) < MIN_GRID_RES)
+		gkrellm_set_chartconfig_grid_resolution(cp->config, DEFAULT_GRID_RES);
 
 	gkrellm_alloc_chartdata(cp);
 

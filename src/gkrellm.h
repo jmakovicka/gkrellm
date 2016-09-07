@@ -109,7 +109,8 @@
 #define	GKRELLM_VERSION_MAJOR	2
 #define	GKRELLM_VERSION_MINOR	3
 #define	GKRELLM_VERSION_REV		8
-#define	GKRELLM_EXTRAVERSION	"-pre1"
+#define	GKRELLM_EXTRAVERSION	""
+//#define	GKRELLM_EXTRAVERSION	"-pre1"
 
 #define GKRELLM_CHECK_VERSION(major,minor,rev)    \
 	(GKRELLM_VERSION_MAJOR > (major) || \
@@ -721,11 +722,12 @@ typedef struct
 	gchar		*label;
 	gulong		current,
 				previous,
+				wrap,
 				discard;
 	gboolean	monotonic;
 	GkrellmChartlayer layer;	/* The image + grid for this data layer */
 	GdkBitmap	*data_bitmap;	/* Draw data here, use as clipmask for layer*/
-	gint		*data;
+	gulong		*data;
 
 	gint		draw_style;
 	gboolean	inverted;
@@ -742,7 +744,7 @@ typedef struct
 	gint		y,				/* Each data layer draws at an offset y and */
 				h,				/* within height h of its parent GkrellmChart*/
 				w;				/* Width of data allocated.				*/
-	gint		maxval;
+	gulong		maxval;
 	}
 	GkrellmChartdata;
 

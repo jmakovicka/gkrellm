@@ -49,7 +49,8 @@
 typedef struct
 	{
 	gchar			*name,
-					*label;			/* Possibly translated name */
+					*default_label,			/* Possibly translated name */
+					*label;
 	GtkWidget		*vbox;
 	GtkWidget		*enable_button;
 	GkrellmChart	*chart;
@@ -139,7 +140,7 @@ lookup_disk_by_name(const gchar *name)
 		|  written into the config.  XXX remove this eventually.
 		*/
 		if (   (disk == composite_disk || assign_method == DISK_ASSIGN_NTH)
-			&& !strcmp(name, disk->label))
+			&& !strcmp(name, disk->default_label))
 			return disk;
 		}
 	return NULL;
@@ -152,6 +153,7 @@ disk_new(const gchar *name, const gchar *label)
 
 	disk = g_new0(DiskMon, 1);
 	disk->name = g_strdup(name);
+	disk->default_label = g_strdup(label);
 	disk->label = g_strdup(label);
 	disk->launch.command = g_strdup("");
 	disk->launch.tooltip_comment = g_strdup("");
@@ -944,11 +946,11 @@ save_disk_config(FILE *f)
 		have_enabled_subdisks = (disk->subdisk == -1) ?
 					any_enabled_subdisks(list->next) : FALSE;
 
-		fprintf(f, "%s device %s %d %d %d %d %d %d %d\n",
+		fprintf(f, "%s device %s %d %d %d %d %d %d %d %s\n",
 					DISK_CONFIG_KEYWORD,
 					disk->name, disk->major, disk->minor, disk->order,
 					disk->enabled, disk->extra_info, disk->subdisk,
-					have_enabled_subdisks);
+					have_enabled_subdisks, disk->label);
 		if (*(disk->launch.command) != '\0')
 			fprintf(f, "%s launch %s %s\n", DISK_CONFIG_KEYWORD,
 						disk->name, disk->launch.command);
@@ -974,7 +976,7 @@ load_disk_config(gchar *arg)
 	{
 	DiskMon		*disk = NULL;
 	gchar		config[32], item[CFG_BUFSIZE],
-				name[CFG_BUFSIZE], item1[CFG_BUFSIZE];
+				name[CFG_BUFSIZE], item1[CFG_BUFSIZE], disk_label[64];
 	gint		major, minor, enabled, extra, order, subdisk = -1;
 	gint		n;
 	gboolean	enabled_subdisks = TRUE;
@@ -997,10 +999,10 @@ load_disk_config(gchar *arg)
 			|  if user changes kernel version.
 			*/
 			if (   config_assign_method == assign_method
-				&& sscanf(item1, "%d %d %d %d %d %d %d",
+				&& (n = sscanf(item1, "%d %d %d %d %d %d %d %63s",
 							&major, &minor, &order,
 							&enabled, &extra,
-							&subdisk, &enabled_subdisks) >= 5
+							&subdisk, &enabled_subdisks, disk_label)) >= 5
 			   )
 				{
 				/* A disk in the config may not have been found in the above
@@ -1023,6 +1025,8 @@ load_disk_config(gchar *arg)
 					{
 					disk->enabled = enabled;
 					disk->extra_info = extra;
+					if (n >= 8)
+						gkrellm_dup_string(&disk->label, disk_label);
 					}
 				}
 			return;
@@ -1054,11 +1058,14 @@ enum
 	{
 	NAME_COLUMN,
 	ENABLE_COLUMN,
+	LABEL_COLUMN,
 	DISK_COLUMN,
+	VISIBLE_COLUMN,
 	IMAGE_COLUMN,
 	N_COLUMNS
 	};
 
+static GtkTreeModel			*disk_model;
 static GtkTreeView			*treeview;
 
 static GtkTreeRowReference	*row_reference;
@@ -1082,7 +1089,9 @@ create_model(void)
 	tree = gtk_tree_store_new(N_COLUMNS,
 				G_TYPE_STRING,
                 G_TYPE_BOOLEAN,
+				G_TYPE_STRING,
 				G_TYPE_POINTER,
+				G_TYPE_BOOLEAN,
 				GDK_TYPE_PIXBUF);
 	for (list = disk_mon_list; list; )
 		{
@@ -1090,16 +1099,20 @@ create_model(void)
 		gtk_tree_store_append(tree, &iter, NULL);
 		if (list == disk_mon_list)
 			gtk_tree_store_set(tree, &iter,
-				NAME_COLUMN, _("Composite chart combines data for all disks"),
+				NAME_COLUMN, _("Composite chart"),
 				ENABLE_COLUMN, disk->enabled,
+				LABEL_COLUMN, disk->label,
 				DISK_COLUMN, disk,
+				VISIBLE_COLUMN, TRUE,
 				-1);
 		else
 			{
 			gtk_tree_store_set(tree, &iter,
-					NAME_COLUMN, disk->label,
+					NAME_COLUMN, disk->default_label,
 					ENABLE_COLUMN, disk->enabled,
+					LABEL_COLUMN, disk->label,
 					DISK_COLUMN, disk,
+					VISIBLE_COLUMN, TRUE,
 					-1);
 			if (disk->alert)
 				gtk_tree_store_set(tree, &iter,
@@ -1112,9 +1125,11 @@ create_model(void)
 				break;
 			gtk_tree_store_append(tree, &citer, &iter);
 			gtk_tree_store_set(tree, &citer,
-					NAME_COLUMN, disk->name,
+					NAME_COLUMN, disk->default_label,
 					ENABLE_COLUMN, disk->enabled,
+					LABEL_COLUMN, disk->label,
 					DISK_COLUMN, disk,
+					VISIBLE_COLUMN, TRUE,
 					-1);
 			if (disk->alert)
 				gtk_tree_store_set(tree, &citer,
@@ -1139,7 +1154,7 @@ add_launch_entry(GtkWidget *vbox, DiskMon *disk)
 	{
 	disk->launch_table = gkrellm_gtk_launcher_table_new(vbox, 1);
 	gkrellm_gtk_config_launcher(disk->launch_table, 0,  &disk->launch_entry,
-				&disk->tooltip_entry, disk->label,
+				&disk->tooltip_entry, disk->default_label,
 				&disk->launch);
 	g_signal_connect(G_OBJECT(disk->launch_entry), "changed",
 				G_CALLBACK(cb_launch_entry), disk);
@@ -1249,6 +1264,49 @@ cb_set_alert(GtkWidget *button, gpointer data)
 	gkrellm_alert_config_window(&disk->alert);
 	}
 
+static void
+label_edited_cb(GtkCellRendererText *cell, gchar *path_string,
+                gchar *new_label, gpointer data)
+	{
+	GtkTreeModel *model;
+	GtkTreeIter  iter;
+	GtkTreePath  *path;
+	DiskMon       *disk;
+
+	model = disk_model;
+	path = gtk_tree_path_new_from_string(path_string);
+	gtk_tree_model_get_iter(model, &iter, path);
+	gtk_tree_path_free(path);
+
+	gtk_tree_model_get(model, &iter,
+	                   DISK_COLUMN, &disk,
+	                   -1);
+	if (!*new_label)
+		new_label = disk->default_label;
+	gtk_tree_store_set(GTK_TREE_STORE(model), &iter,
+	                   LABEL_COLUMN, new_label, -1);
+
+	if (strcmp(new_label, disk->label))
+		{
+		gkrellm_dup_string(&disk->label, new_label);
+		gkrellm_panel_configure(disk->chart->panel, disk->label,
+				gkrellm_panel_style(style_id));
+		gkrellm_panel_create(disk->vbox, mon_disk, disk->chart->panel);
+		}
+#if 0
+	if (gkrellm_locale_dup_string(&s->name, new_label, &s->name_locale))
+		{
+		gkrellm_sensors_rebuild(s->type == SENSOR_TEMPERATURE,
+		                        s->type == SENSOR_FAN, s->type == SENSOR_VOLTAGE);
+		if (s->alert)
+			{
+			g_free(s->alert->name);
+			s->alert->name = g_strdup(s->name);
+//          gkrellm_reset_alert(s->alert);
+			}
+		}
+#endif
+	}
 
 static void
 cb_tree_selection_changed(GtkTreeSelection *selection, gpointer data)
@@ -1391,6 +1449,7 @@ create_disk_tab(GtkWidget *tab_vbox)
 	gtk_box_pack_start(GTK_BOX(vbox), scrolled, TRUE, TRUE, 0);
 
 	model = create_model();
+	disk_model = model;
 
 	treeview = GTK_TREE_VIEW(gtk_tree_view_new_with_model(model));
 	gtk_tree_view_set_rules_hint(treeview, TRUE);
@@ -1408,6 +1467,15 @@ create_disk_tab(GtkWidget *tab_vbox)
 				renderer,
 				"text", NAME_COLUMN,
 				NULL);
+	renderer = gtk_cell_renderer_text_new();
+	gtk_tree_view_insert_column_with_attributes(treeview, -1, _("Label"),
+				renderer,
+				"text", LABEL_COLUMN,
+				"editable", TRUE,
+				"visible", VISIBLE_COLUMN,
+				NULL);
+	g_signal_connect(G_OBJECT(renderer), "edited",
+				G_CALLBACK(label_edited_cb), NULL);
 
 	renderer = gtk_cell_renderer_pixbuf_new();
 	gtk_tree_view_insert_column_with_attributes(treeview, -1, "",

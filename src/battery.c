@@ -171,11 +171,11 @@ read_battery_demo(void)
 static gboolean
 setup_battery_interface(void)
 	{
-    if (!read_battery_data && !_GK.client_mode && gkrellm_sys_battery_init())
-        read_battery_data = gkrellm_sys_battery_read_data;
+	if (!read_battery_data && !_GK.client_mode && gkrellm_sys_battery_init())
+		read_battery_data = gkrellm_sys_battery_read_data;
 	if (_GK.demo)
 		read_battery_data = read_battery_demo;
-    return read_battery_data ? TRUE : FALSE;
+	return read_battery_data ? TRUE : FALSE;
 	}
 
 void 

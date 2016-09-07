@@ -64,7 +64,7 @@ os_release(gint major, gint minor, gint rev)
 	{
 	if (   os_major > major
 		|| (os_major == major && os_minor > minor)
-		|| (os_major == os_major && os_minor == minor && os_rev >= rev)
+		|| (os_major == major && os_minor == minor && os_rev >= rev)
 	   )
 		return TRUE;
 	return FALSE;
@@ -304,8 +304,12 @@ gkrellm_sys_cpu_init(void)
 /* ===================================================================== */
 /* Disk monitor interface */
 
+// http://stackoverflow.com/questions/1823743/knowing-a-device-special-file-major-and-minor-numbers-in-linux
+// https://fedoraproject.org/wiki/BlockDeviceOddities
+
 #define	PROC_PARTITIONS_FILE	"/proc/partitions"
 #define	PROC_DISKSTATS_FILE		"/proc/diskstats"
+#define	PROC_DEVICES_FILE		"/proc/devices"
 
 #include <linux/major.h>
 #if ! defined (SCSI_DISK0_MAJOR)
@@ -313,9 +317,6 @@ gkrellm_sys_cpu_init(void)
 #endif
 #if ! defined (MD_MAJOR)
 #define MD_MAJOR	9
-#endif
-#if !defined(DM_MAJOR)
-#define DM_MAJOR 254
 #endif
 
 #if !defined(IDE4_MAJOR)
@@ -413,23 +414,78 @@ static struct _disk_name_map
 	{"cc6d", COMPAQ_CISS_MAJOR + 6,		16,	'0' },	/* 110:  c6d0-c6d15 */
 	{"cc7d", COMPAQ_CISS_MAJOR + 7,		16,	'0' },	/* 111:  c7d0-c7d15 */
 
-	{"dm-",  DM_MAJOR,              	256, '0' },	/* 254:  dm-0 - dm-255 */
+	{"dm-",  0 /* dynamic major */,    	256, '0' },	/* 254:  dm-0 - dm-255 */
+	{"mdp",  0 /* dynamic major */,    	256, '0' },	/* 254:  dm-0 - dm-255 */
 
 	{"fd",	FLOPPY_MAJOR,				0,	'0' }	/* 2:  fd0-fd3  */
 	};
 
-static gboolean
-disk_major_ok(gint major)
+#define DISK_MAJOR_STATUS_SIZE		512
+#define 	MAJOR_STATUS_UNKNOWN	0
+#define 	MAJOR_STATUS_KNOWN		1
+#define 	MAJOR_STATUS_VIRTUAL	2
+#define 	MAJOR_STATUS_REJECT		4
+
+static guchar disk_major_status[DISK_MAJOR_STATUS_SIZE];
+
+  /* Init table with known disk major numbers.
+  */
+static void
+disk_major_status_init(void)
 	{
-	gint		i;
+	int		i, m;
 
 	for (i = 0; i < sizeof(disk_name_map) / sizeof(struct _disk_name_map); ++i)
 		{
-		if (major == disk_name_map[i].major)
-			return TRUE;
+		if (i >= DISK_MAJOR_STATUS_SIZE)
+			continue;
+		m = disk_name_map[i].major;
+		disk_major_status[m] = MAJOR_STATUS_KNOWN;
 		}
-	return FALSE;
 	}
+
+  /* For unknown disk major numbers, check /proc/devices to see if this
+  |  major number is an expected dynamic virtual disk.  Otherwise
+  |  the disk will be rejected. 
+  */
+static gboolean
+dynamic_disk_major(int major)
+	{
+	FILE		*f;
+	gboolean	result = FALSE;
+	int			m;
+	gchar		buf[128], name_buf[32];
+
+	if ((f = fopen(PROC_DEVICES_FILE, "r")) != NULL)
+		{
+		while ((fgets(buf, sizeof(buf), f)) != NULL)
+			{
+			if (sscanf(buf, "%d %31s", &m, name_buf) != 2)
+				continue;
+		    if (   (   !strcmp(name_buf, "device-mapper")
+			        || !strcmp(name_buf, "mdp")
+			       )
+			    && m == major
+			    && m < DISK_MAJOR_STATUS_SIZE
+			   )
+				{
+				disk_major_status[m] = (MAJOR_STATUS_KNOWN | MAJOR_STATUS_VIRTUAL);
+				result = TRUE;
+				gkrellm_debug(DEBUG_SYSDEP,
+					"Adding dynamic disk major: %d %s\n", major, name_buf);
+				break;
+				}
+			}
+		fclose(f);
+		}
+	if (result == FALSE)
+		{
+		gkrellm_debug(DEBUG_SYSDEP, "Unknown disk major number: %d\n", major);
+		disk_major_status[major] = MAJOR_STATUS_REJECT;
+		}
+	return result;
+	}
+
 
 gchar *
 gkrellm_sys_disk_name_from_device(gint device_number, gint unit_number,
@@ -509,8 +565,8 @@ disk_get_device_name(gint major, gint minor, gchar *disk, gchar *partition)
 		{	/* Have a simple name like hda, hda1, sda, ... */
 		d = disk;
 		p = partition;
-		while (*d && *p && *d++ == *p++)
-			;
+		while (*d && *p && *d == *p)
+			++d, ++p;
 
 		/* Check that p points to valid partition number.  Should be a digit
 		|  unless disk is mmcblkN where the partition number has a leading 'p'
@@ -564,8 +620,7 @@ linux_read_proc_diskstats(void)
 	gchar			buf[1024], part[128], disk[128];
 	gint			major, minor, n;
 	gulong			rd, wr, rd1, wr1;
-	gboolean		inactivity_override, is_MD;
-	static gboolean	initial_read = TRUE;
+	gboolean		is_virtual;
 
 	if (!f && (f = fopen(PROC_DISKSTATS_FILE, "r")) == NULL)
 		return;
@@ -588,34 +643,40 @@ linux_read_proc_diskstats(void)
 			wr = wr1;
 			}
 
-		/* Make sure all real disks get reported (so they will be added to the
-		|  disk monitor in order) the first time this function is called.
-		|  Use disk_major_ok() instead of simply initial_read until I'm sure
-		|  I'm testing for all the right "major" exclusions.
-		|  Note: disk_get_device_name() assumes "part[]" retains results from
+		if (   major >= DISK_MAJOR_STATUS_SIZE
+		    || disk_major_status[major] == MAJOR_STATUS_REJECT
+		   )
+			continue;
+
+		/* Check for a dynamic major disk number, assumed to be virtual
+		*/
+		if (   disk_major_status[major] == MAJOR_STATUS_UNKNOWN
+		    && !dynamic_disk_major(major)
+		   )
+			continue;
+
+		/* Note: disk_get_device_name() assumes "part[]" retains results from
 		|  previous calls and that disk/subdisk parsing will be in order
 		|  (ie hda will be encountered before hda1).
 		*/
-		inactivity_override = initial_read ? disk_major_ok(major) : FALSE;
-
 		if (   (n != 7 && n != 6)
-			|| (rd == 0 && wr == 0 && !inactivity_override)
+			|| (rd == 0 && wr == 0)
 			|| major == LVM_BLK_MAJOR || major == NBD_MAJOR
 			|| major == RAMDISK_MAJOR || major == LOOP_MAJOR
-		    || major == DM_MAJOR
 			|| !disk_get_device_name(major, minor, disk, part)
 		   )
 			continue;
-		is_MD = (major == MD_MAJOR);
+		is_virtual = (   major == MD_MAJOR
+					  || (disk_major_status[major] & MAJOR_STATUS_VIRTUAL)
+					 );
 
 		if (part[0] == '\0')
-			gkrellm_disk_assign_data_by_name(disk, 512 * rd, 512 * wr, is_MD);
+			gkrellm_disk_assign_data_by_name(disk, 512 * rd, 512 * wr, is_virtual);
 		else
 			gkrellm_disk_subdisk_assign_data_by_name(part, disk,
 						512 * rd, 512 * wr);
 		}
 	rewind(f);
-	initial_read = FALSE;
 	}
 
   /* /proc/partitions can have diskstats in 2.4 kernels or in 2.5+ it's just
@@ -730,6 +791,8 @@ gkrellm_sys_disk_init(void)
 		}
 	if (f)
 		fclose(f);
+	disk_major_status_init();
+
 	gkrellm_debug(DEBUG_SYSDEP,
 		"diskstats=%d partition_stats=%d sysfs_stats=%d\n", have_diskstats,
 		have_partition_stats, have_sysfs_stats);

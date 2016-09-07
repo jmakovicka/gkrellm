@@ -698,7 +698,7 @@ gkrellm_alloc_chartdata(GkrellmChart *cp)
 		cd->w = w;
 		if (cd->data)
 			g_free(cd->data);
-		cd->data = (gint *) g_new0(gint, w);
+		cd->data = (gulong *) g_new0(gulong, w);
 		cd->maxval = 0;
 		cp->position = cp->w - 1;
 		cp->tail = cp->position;
@@ -847,8 +847,14 @@ gkrellm_store_chartdatav(GkrellmChart *cp, gulong total, va_list args)
 			}
 		/* Prime the pump.  Also handle data wrap around or reset to zero.
 		*/
-		if (cd->current < cd->previous || !cp->primed)
+		cd->wrap = 0;
+		if (!cp->primed)
 			cd->previous = cd->current;
+		else if (cd->current < cd->previous)
+			{
+			cd->wrap = (gulong) -1 - cd->previous;
+			cd->previous = 0;
+			}
 		}
 	if (total < cp->previous_total || !cp->primed)
 		cp->previous_total = total;	  /* Wrap around, this store won't scale */
@@ -871,7 +877,7 @@ gkrellm_store_chartdatav(GkrellmChart *cp, gulong total, va_list args)
 		{
 		cd = (GkrellmChartdata *) list->data;
 		cd->discard = cd->data[cp->tail];
-		cd->data[n] = (gint)(cd->current - cd->previous);
+		cd->data[n] = (gulong)(cd->current - cd->previous) + cd->wrap;
 		cd->previous = cd->current;
 
 		/* If using totals, scale the stored data to range between 0 and the
