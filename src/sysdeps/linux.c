@@ -312,6 +312,10 @@ gkrellm_sys_cpu_init(void)
 #define	PROC_DEVICES_FILE		"/proc/devices"
 
 #include <linux/major.h>
+
+// Will get dynamic major numbers from /proc/devices
+#define DYNAMIC_MAJOR	0
+
 #if ! defined (SCSI_DISK0_MAJOR)
 #define SCSI_DISK0_MAJOR	8
 #endif
@@ -355,6 +359,9 @@ gkrellm_sys_cpu_init(void)
 #if !defined(I2O_MAJOR)
 #define I2O_MAJOR 80
 #endif
+#if !defined(MMC_BLOCK_MAJOR)
+#define  MMC_BLOCK_MAJOR	DYNAMIC_MAJOR
+#endif
 
 
 struct _disk_name_map
@@ -380,6 +387,8 @@ static struct _disk_name_map
 	{"hd",	IDE7_MAJOR,					64,	'o' },	/* 89: hdo, hdp */
 	{"hd",	IDE8_MAJOR,					64,	'q' },	/* 90: hdq, hdr */
 	{"hd",	IDE9_MAJOR,					64,	's' },	/* 91: hds, hdt */
+
+	{"mmc", MMC_BLOCK_MAJOR,            16, '0' },  /* 179: mmcblk0pN */
 	{"sd",	SCSI_DISK0_MAJOR,			16,	'a' },	/* 8:  sda-sdh */
 	{"sg",	SCSI_GENERIC_MAJOR,			16,	'0' },	/* 21: sg0-sg16 */
 	{"scd",	SCSI_CDROM_MAJOR,			16,	'0' },	/* 11: scd0-scd16 */
@@ -414,8 +423,8 @@ static struct _disk_name_map
 	{"cc6d", COMPAQ_CISS_MAJOR + 6,		16,	'0' },	/* 110:  c6d0-c6d15 */
 	{"cc7d", COMPAQ_CISS_MAJOR + 7,		16,	'0' },	/* 111:  c7d0-c7d15 */
 
-	{"dm-",  0 /* dynamic major */,    	256, '0' },	/* 254:  dm-0 - dm-255 */
-	{"mdp",  0 /* dynamic major */,    	256, '0' },	/* 254:  dm-0 - dm-255 */
+	{"dm-",  DYNAMIC_MAJOR,    	256, '0' },	/* 254:  dm-0 - dm-255 */
+	{"mdp",  DYNAMIC_MAJOR,    	256, '0' },	/* 254:  dm-0 - dm-255 */
 
 	{"fd",	FLOPPY_MAJOR,				0,	'0' }	/* 2:  fd0-fd3  */
 	};
@@ -464,6 +473,7 @@ dynamic_disk_major(int major)
 				continue;
 		    if (   (   !strcmp(name_buf, "device-mapper")
 			        || !strcmp(name_buf, "mdp")
+				    || !strcmp(name_buf, "mmc")
 			       )
 			    && m == major
 			    && m < DISK_MAJOR_STATUS_SIZE

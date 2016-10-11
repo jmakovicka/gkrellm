@@ -1014,6 +1014,18 @@ N_("\t\\e    draw right justified in the defined field width\n"),
 N_("\t\\.     no-op.  Used to break a string into two strings.\n"),
 N_("\t\\D0   bottom of charts first data view (D2 for second data view ...)\n"),
 N_("\t\\D1   top of charts first data view (D3 for second data view ...)\n"),
+"\n",
+N_("\tText drawn on charts cannot use Pango markup and changing the color\n"),
+N_("\tused for a chart default or alternate font requires editing the theme.\n"),
+"\n",
+
+N_("<h>Panel Labels\n"),
+N_("\tMost panel labels can use Pango markup to customize the font or\n"
+   "\ttext color.  If the Pango markup string requires quote characters some\n"
+   "\tmonitors (eg Sensors) require using single quotes instead of double\n"
+   "\tquotes.  For example, to set a big colored CPU label, use markup:\n"),
+	"\t    <span foreground='cyan'><big>CPU</big></span>\n",
+"\n",
 
 N_("<h>\nCommands\n"),
 N_("\tMany monitors can be configured to launch commands.  Just enter the\n"

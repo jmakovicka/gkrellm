@@ -119,6 +119,8 @@ gkrellm_panel_configure(GkrellmPanel *p, gchar *string, GkrellmStyle *style)
 	GkrellmDecal	*d;
 	GkrellmLabel	*lbl;
 	GkrellmTextstyle *ts = NULL;
+	PangoLayoutIter	*iter;
+	PangoRectangle	ink, logical;
 	gint			y, h_panel, h, baseline;
 	gint			top_margin = 0, bottom_margin = 0;
 
@@ -132,6 +134,11 @@ gkrellm_panel_configure(GkrellmPanel *p, gchar *string, GkrellmStyle *style)
 
 	ts = p->textstyle;
 
+	if (p->label_layout)
+		{
+		g_object_unref(p->label_layout);
+		p->label_layout = NULL;
+		}
 	if (string)
 		{
 		if (g_utf8_validate(string, -1, NULL))
@@ -143,8 +150,28 @@ gkrellm_panel_configure(GkrellmPanel *p, gchar *string, GkrellmStyle *style)
 		gkrellm_dup_string(&lbl->string, string);
 
 	if (lbl->string && ts && lbl->position >= 0)
-		gkrellm_text_extents(ts->font, string, strlen(string),
-				&lbl->width, &lbl->height, &baseline, NULL);
+		{
+		p->label_layout =
+				gtk_widget_create_pango_layout(gkrellm_get_top_window(), NULL);
+		pango_layout_set_font_description(p->label_layout, ts->font);
+		if (pango_parse_markup(lbl->string, -1, 0, NULL, NULL, NULL, NULL))
+			pango_layout_set_markup(p->label_layout,
+						lbl->string, strlen(lbl->string));
+		else
+			pango_layout_set_text(p->label_layout,
+						lbl->string, strlen(lbl->string));
+		iter = pango_layout_get_iter(p->label_layout);
+		baseline = pango_layout_iter_get_baseline(iter) / PANGO_SCALE;
+		pango_layout_get_pixel_extents(p->label_layout, &ink, &logical);
+		pango_layout_iter_free(iter);
+
+		lbl->width = logical.width;
+		lbl->height = ink.height;
+		if (ts->effect)
+			lbl->height += 1;
+//		gkrellm_text_extents(ts->font, string, strlen(string),
+//				&lbl->width, &lbl->height, &baseline, NULL);
+		}
 	else
 		{
 		lbl->width = 0;
@@ -219,12 +246,32 @@ draw_panel_label(GkrellmPanel *p, gboolean to_bg)
 	gchar				*s;
 	gint				xdst;
 
-	if (   lbl && ts
+	if (   p->label_layout && lbl && ts
 		&& ((s = lbl->string) != NULL)
 		&& lbl->position >= 0
 	   )
 		{
 		m = gkrellm_get_style_margins(p->style);
+		xdst = gkrellm_label_x_position(lbl->position, p->w,
+								lbl->width, m->left);
+		lbl->x_panel = xdst;
+		if (ts->effect)
+			{
+			gdk_draw_layout_with_colors(p->pixmap, _GK.text_GC,
+					xdst + 1, lbl->y_panel + 1, p->label_layout,
+					&ts->shadow_color, NULL);
+			if (to_bg)
+				gdk_draw_layout_with_colors(p->bg_pixmap, _GK.text_GC,
+						xdst + 1, lbl->y_panel + 1, p->label_layout,
+						&ts->shadow_color, NULL);
+			}
+		gdk_gc_set_foreground(_GK.text_GC, &ts->color);
+		gdk_draw_layout(p->pixmap, _GK.text_GC, xdst,
+						lbl->y_panel, p->label_layout);
+		if (to_bg)
+			gdk_draw_layout(p->bg_pixmap, _GK.text_GC, xdst,
+							lbl->y_panel, p->label_layout);
+#if 0
 		lbl->width = gkrellm_gdk_string_width(ts->font, s) + ts->effect;
 		xdst = gkrellm_label_x_position(lbl->position, p->w,
 					lbl->width, m->left);
@@ -232,6 +279,7 @@ draw_panel_label(GkrellmPanel *p, gboolean to_bg)
 		gkrellm_draw_string(p->pixmap, ts, xdst, lbl->y_panel, s);
 		if (to_bg)
 			gkrellm_draw_string(p->bg_pixmap, ts, xdst, lbl->y_panel, s);
+#endif
 		}
 	}
 
@@ -290,6 +338,9 @@ gkrellm_panel_destroy(GkrellmPanel *p)
 		}
 	if (p->layout)
 		g_object_unref(G_OBJECT(p->layout));
+	if (p->label_layout)
+		g_object_unref(G_OBJECT(p->label_layout));
+
 	if (p->textstyle && p->textstyle->internal)
 		g_free(p->textstyle);
 	if (p->pixmap)

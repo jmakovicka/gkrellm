@@ -999,7 +999,7 @@ load_disk_config(gchar *arg)
 			|  if user changes kernel version.
 			*/
 			if (   config_assign_method == assign_method
-				&& (n = sscanf(item1, "%d %d %d %d %d %d %d %63s",
+				&& (n = sscanf(item1, "%d %d %d %d %d %d %d %63[^\n]",
 							&major, &minor, &order,
 							&enabled, &extra,
 							&subdisk, &enabled_subdisks, disk_label)) >= 5

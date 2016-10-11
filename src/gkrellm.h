@@ -108,7 +108,7 @@
 */
 #define	GKRELLM_VERSION_MAJOR	2
 #define	GKRELLM_VERSION_MINOR	3
-#define	GKRELLM_VERSION_REV		8
+#define	GKRELLM_VERSION_REV		9
 #define	GKRELLM_EXTRAVERSION	""
 //#define	GKRELLM_EXTRAVERSION	"-pre1"
 
@@ -507,6 +507,7 @@ typedef struct
 	gint		h_configure;
 
 	PangoLayout	*layout;
+	PangoLayout	 *label_layout;
 
 	gint		transparency;
 	gboolean	modified;		/* True if decal/krell modified.	*/
