@@ -359,6 +359,9 @@ gkrellm_sys_cpu_init(void)
 #if !defined(I2O_MAJOR)
 #define I2O_MAJOR 80
 #endif
+#if !defined(BLOCK_EXT_MAJOR)
+#define  BLOCK_EXT_MAJOR 259
+#endif
 #if !defined(MMC_BLOCK_MAJOR)
 #define  MMC_BLOCK_MAJOR	DYNAMIC_MAJOR
 #endif
@@ -389,6 +392,7 @@ static struct _disk_name_map
 	{"hd",	IDE9_MAJOR,					64,	's' },	/* 91: hds, hdt */
 
 	{"mmc", MMC_BLOCK_MAJOR,            16, '0' },  /* 179: mmcblk0pN */
+	{"nvme", BLOCK_EXT_MAJOR,			16, '0' },  /* 259: nvme  */
 	{"sd",	SCSI_DISK0_MAJOR,			16,	'a' },	/* 8:  sda-sdh */
 	{"sg",	SCSI_GENERIC_MAJOR,			16,	'0' },	/* 21: sg0-sg16 */
 	{"scd",	SCSI_CDROM_MAJOR,			16,	'0' },	/* 11: scd0-scd16 */
@@ -430,10 +434,10 @@ static struct _disk_name_map
 	};
 
 #define DISK_MAJOR_STATUS_SIZE		512
-#define 	MAJOR_STATUS_UNKNOWN	0
-#define 	MAJOR_STATUS_KNOWN		1
+#define 	MAJOR_STATUS_UNCHECKED	0
+#define 	MAJOR_STATUS_FIXED		1
 #define 	MAJOR_STATUS_VIRTUAL	2
-#define 	MAJOR_STATUS_REJECT		4
+#define 	MAJOR_STATUS_UNKNOWN	4	// major # not in major.h or /proc/devices
 
 static guchar disk_major_status[DISK_MAJOR_STATUS_SIZE];
 
@@ -449,21 +453,27 @@ disk_major_status_init(void)
 		if (i >= DISK_MAJOR_STATUS_SIZE)
 			continue;
 		m = disk_name_map[i].major;
-		disk_major_status[m] = MAJOR_STATUS_KNOWN;
+		if (m > 0)
+			disk_major_status[m] = MAJOR_STATUS_FIXED;
 		}
 	}
 
-  /* For unknown disk major numbers, check /proc/devices to see if this
+  /* As major numbers encountered, check /proc/devices to see if this
   |  major number is an expected dynamic virtual disk.  Otherwise
-  |  the disk will be rejected. 
+  |  the disk is unknown (not in table or /proc/devices) and will still
+  |  be reported, but wont be handled by disk_order_from_name() and it
+  |  is not known if this is a virtual disk.
   */
-static gboolean
-dynamic_disk_major(int major)
+static void
+dynamic_disk_major_check(int major)
 	{
 	FILE		*f;
-	gboolean	result = FALSE;
 	int			m;
 	gchar		buf[128], name_buf[32];
+
+	if (major >= DISK_MAJOR_STATUS_SIZE)
+		return;
+	disk_major_status[major] = MAJOR_STATUS_UNKNOWN;
 
 	if ((f = fopen(PROC_DEVICES_FILE, "r")) != NULL)
 		{
@@ -479,8 +489,7 @@ dynamic_disk_major(int major)
 			    && m < DISK_MAJOR_STATUS_SIZE
 			   )
 				{
-				disk_major_status[m] = (MAJOR_STATUS_KNOWN | MAJOR_STATUS_VIRTUAL);
-				result = TRUE;
+				disk_major_status[m] = MAJOR_STATUS_VIRTUAL;
 				gkrellm_debug(DEBUG_SYSDEP,
 					"Adding dynamic disk major: %d %s\n", major, name_buf);
 				break;
@@ -488,12 +497,8 @@ dynamic_disk_major(int major)
 			}
 		fclose(f);
 		}
-	if (result == FALSE)
-		{
+	if (disk_major_status[major] == MAJOR_STATUS_UNKNOWN)
 		gkrellm_debug(DEBUG_SYSDEP, "Unknown disk major number: %d\n", major);
-		disk_major_status[major] = MAJOR_STATUS_REJECT;
-		}
-	return result;
 	}
 
 
@@ -571,18 +576,26 @@ disk_get_device_name(gint major, gint minor, gchar *disk, gchar *partition)
 	for (p = partition; *p; ++p)
 		if (*p == '/')
 			break;
+//printf("%s:%s\n", disk, partition);
+
 	if (!*p)
 		{	/* Have a simple name like hda, hda1, sda, ... */
 		d = disk;
 		p = partition;
 		while (*d && *p && *d == *p)
 			++d, ++p;
+//printf("    [%s:%s]\n", d, p);
 
 		/* Check that p points to valid partition number.  Should be a digit
-		|  unless disk is mmcblkN where the partition number has a leading 'p'
+		|  or leading 'p' partition number for some disks (mmcblk, nvme).
 		*/
-		if (*p == 'p' && !strncmp(partition, "mmcblk", 6))
+		if (   *p == 'p'
+		    && (   !strncmp(partition, "mmcblk", 6)
+		        || !strncmp(partition, "nvme", 4)
+		       )
+		    )
 			++p;
+
 		if (*p >= '0' && *p <= '9')
 			valid_partition_number = TRUE;
 
@@ -653,17 +666,13 @@ linux_read_proc_diskstats(void)
 			wr = wr1;
 			}
 
-		if (   major >= DISK_MAJOR_STATUS_SIZE
-		    || disk_major_status[major] == MAJOR_STATUS_REJECT
-		   )
+		if (major >= DISK_MAJOR_STATUS_SIZE)
 			continue;
 
 		/* Check for a dynamic major disk number, assumed to be virtual
 		*/
-		if (   disk_major_status[major] == MAJOR_STATUS_UNKNOWN
-		    && !dynamic_disk_major(major)
-		   )
-			continue;
+		if (disk_major_status[major] == MAJOR_STATUS_UNCHECKED)
+			dynamic_disk_major_check(major);
 
 		/* Note: disk_get_device_name() assumes "part[]" retains results from
 		|  previous calls and that disk/subdisk parsing will be in order
@@ -677,7 +686,7 @@ linux_read_proc_diskstats(void)
 		   )
 			continue;
 		is_virtual = (   major == MD_MAJOR
-					  || (disk_major_status[major] & MAJOR_STATUS_VIRTUAL)
+					  || (disk_major_status[major] == MAJOR_STATUS_VIRTUAL)
 					 );
 
 		if (part[0] == '\0')
