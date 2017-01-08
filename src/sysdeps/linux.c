@@ -556,6 +556,8 @@ gkrellm_sys_disk_order_from_name(const gchar *name)
 		}
 	if (i >= table_size)
 		i = -1;
+	if (i > 9) /* > hda */
+		i += (i - 10) * 16 + suffix - dm->suffix_base;
 	return i;
 	}
 
