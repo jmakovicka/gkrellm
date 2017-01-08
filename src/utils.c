@@ -276,13 +276,17 @@ gkrellm_format_size_abbrev(gchar *buf, size_t buflen, gfloat size,
 	{
 	gfloat	abs_size;
 	gint	i;
+	int		ret;
 
 	abs_size = (size < 0.0) ? -size : size;
 
 	for (i = 0; i < tbl_size - 1; ++i)
 		if (abs_size < tbl[i].limit)
 			break;
-	return snprintf(buf, buflen, tbl[i].format, size / tbl[i].divisor);
+	ret = snprintf(buf, buflen, tbl[i].format, size / tbl[i].divisor);
+	if (ret < 0 || ret >= buflen)
+		return 0;
+	return ret;
 	}
 
 
