@@ -814,12 +814,36 @@ tcp_shutdown(ConnInfo *conn, Mailbox *mbox, gchar *message, gboolean warn)
 static gboolean
 ssl_negotiate(ConnInfo *conn, Mailbox *mbox)
 	{
-	const SSL_METHOD	*ssl_method;
+	const SSL_METHOD	*ssl_method = NULL;
+	gchar	buf[128];
 
+#if defined(OPENSSL_VERSION_NUMBER) && (OPENSSL_VERSION_NUMBER >= 0x10100000L)
+	ssl_method = TLS_client_method();
+	if (_GK.debug_level & DEBUG_MAIL)
+		{
+		format_remote_mbox_name(mbox, buf, sizeof(buf));
+		g_debug("ssl_negotiate( %s ): will use TLS client method\n", buf);
+		}
+#else
 	if (mbox->account->use_ssl == SSL_TRANSPORT)
+		{
 		ssl_method = SSLv23_client_method();
+		if (_GK.debug_level & DEBUG_MAIL)
+			{
+			format_remote_mbox_name(mbox, buf, sizeof(buf));
+			g_debug("ssl_negotiate( %s ): will use SSLv23 client method\n", buf);
+			}
+		}
 	else
+		{
 		ssl_method = TLSv1_client_method();
+		if (_GK.debug_level & DEBUG_MAIL)
+			{
+			format_remote_mbox_name(mbox, buf, sizeof(buf));
+			g_debug("ssl_negotiate( %s ): will use TLSv1 client method\n", buf);
+			}
+		}
+#endif
 	if (ssl_method == NULL)
 		return tcp_shutdown(conn, mbox,
 				    N_("Cannot initialize SSL method."),
@@ -1251,7 +1275,11 @@ check_imap(Mailbox *mbox)
 #ifdef HAVE_SSL
 	if (account->use_ssl == SSL_STARTTLS)
 		{
-		gkrellm_debug(DEBUG_MAIL, "check_imap: Issuing STARTTLS\n");
+		if (_GK.debug_level & DEBUG_MAIL)
+			{
+			format_remote_mbox_name(mbox, buf, sizeof(buf));
+			g_debug("check_imap( %s ): issuing STARTTLS\n", buf);
+			}
 		snprintf(line, sizeof(line), "a%03d STARTTLS\r\n", ++seq);
 		server_command(&conn, mbox, line);
 		snprintf(line, sizeof(line), "a%03d OK", seq);
@@ -1261,7 +1289,11 @@ check_imap(Mailbox *mbox)
 					    TRUE);
 		if (!ssl_negotiate(&conn, mbox))
 			return FALSE;
-		gkrellm_debug(DEBUG_MAIL, "check_imap: STARTTLS successful\n");
+		if (_GK.debug_level & DEBUG_MAIL)
+			{
+			format_remote_mbox_name(mbox, buf, sizeof(buf));
+			g_debug("check_imap( %s ): STARTTLS successful\n", buf);
+			}
 		}
 #endif
 
