@@ -370,7 +370,8 @@ gkrellm_text_extents(PangoFontDescription *font_desc, gchar *text,
 	else
 		{
 		utf8 = g_locale_to_utf8(text, -1, NULL, NULL, NULL);
-		pango_layout_set_text(layout, utf8, len);
+		if (utf8)
+			pango_layout_set_text(layout, utf8, len);
 		g_free(utf8);
 		}
 	iter = pango_layout_get_iter(layout);
@@ -460,7 +461,8 @@ gkrellm_gdk_draw_text(GdkDrawable *drawable, PangoFontDescription *font_desc,
 
 	layout = gtk_widget_create_pango_layout(gkrellm_get_top_window(), NULL);
 	pango_layout_set_font_description(layout, font_desc);
-	pango_layout_set_text(layout, string, len);
+	if (g_utf8_validate(string, -1, NULL))
+		pango_layout_set_text(layout, string, len);
 	gdk_draw_layout(drawable, gc, x, y, layout);
 	g_object_unref(layout);
 	}
