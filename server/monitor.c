@@ -2018,7 +2018,7 @@ init_sensors_monitor(void)
 /* ======================================================= */
 static time_t	base_uptime,
 				up_seconds;
-static gulong	up_minutes = -1;
+static glong	up_minutes = -1;
 
 void
 gkrellm_uptime_set_base_uptime(time_t base)
@@ -2029,16 +2029,16 @@ gkrellm_uptime_set_base_uptime(time_t base)
 static void
 update_uptime(GkrellmdMonitor *mon, gboolean first_update)
 	{
-	gint	prev_up;
+	glong	prev_up;
 
 	if (GK.ten_second_tick || up_minutes < 0 || first_update)
 		{
 		prev_up = up_minutes;
 		up_seconds = gkrellm_sys_uptime_read_uptime();
 		if (up_seconds > 0)
-			up_minutes = (gint) (up_seconds / 60);
+			up_minutes = (glong) (up_seconds / 60);
 		else
-			up_minutes = (gint)(time(0) - _GK.start_time + base_uptime) / 60;
+			up_minutes = (glong)(time(0) - _GK.start_time + base_uptime) / 60;
 		if (up_minutes != prev_up)
 			gkrellmd_need_serve(mon);
 		}
@@ -2050,7 +2050,7 @@ serve_uptime_data(GkrellmdMonitor *mon, gboolean first_serve)
 	gchar	buf[128];
 
 	gkrellmd_set_serve_name(mon, "uptime");
-	snprintf(buf, sizeof(buf), "%lu\n", (gulong) up_minutes);
+	snprintf(buf, sizeof(buf), "%ld\n", (glong) (up_minutes >= 0 ? up_minutes : 0));
 	gkrellmd_serve_data(mon, buf);
 	}
 
