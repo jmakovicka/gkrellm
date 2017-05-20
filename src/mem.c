@@ -299,7 +299,7 @@ draw_decal_label(MeminfoMeter *mm, gint draw_to_screen)
 	GkrellmDecal		*d;
 	GkrellmTextstyle	ts_save;
 	gchar				buf[128];
-	gint				x_off, w;
+	gint				x_off, w = 0;
 
 	d = mm->decal_label;
 	if (! mm->label_is_data)

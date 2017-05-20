@@ -460,7 +460,7 @@ fs_draw_decal_text(FSmon *fs, gint value)
 	GkrellmDecal		*d;
 	GkrellmTextstyle	ts_save;
 	gchar				buf[128];
-	gint				x_off, w;
+	gint				x_off, w = 0;
 
 	if (value == 0)
 		{
