@@ -3157,6 +3157,7 @@ sensors_nvidia_smi_read(gboolean setup)
 				    || !strcmp(id, ":")
 				   )
 					continue;
+				stmp = str;
 				if ((str = g_strstr_len(str, -1, "Temperature")) != NULL)
 					{
 					str += 11;
@@ -3184,6 +3185,10 @@ sensors_nvidia_smi_read(gboolean setup)
 						}
 					else if ((smi = nvidia_smi_lookup(id)) != NULL)
 						smi->temp = temp;
+					}
+				else
+					{
+					str = stmp;
 					}
 				}
 			}
