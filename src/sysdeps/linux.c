@@ -1525,7 +1525,7 @@ gkrellm_sys_fs_get_mounts_list(void)
 	while (fgets(buf, sizeof(buf), f))
 		{
 		dev[0] = dir[0] = type[0] = '\0';
-		sscanf(buf, "%512s %512s %127s", dev, dir, type);
+		sscanf(buf, "%511s %511s %127s", dev, dir, type);
 		fix_fstab_name(dev);
 		fix_fstab_name(dir);
 		fix_fstab_name(type);
