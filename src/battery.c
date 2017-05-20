@@ -382,7 +382,7 @@ estimate_battery_time_left(Battery *bat)
 			/* charging, use exponential: eta =~ 2.5 * time-constant (~=92%) */
 			eta = -2.5 * dt/60 / (log(1 - (gdouble)dp/(gdouble)(p+dp)));
 		else
-			eta = abs((gdouble)p / rate);	/* use linear */
+			eta = fabs((gdouble)p / rate);	/* use linear */
 
 #ifdef BAT_ESTIMATE_DEBUG
 		fprintf(stderr, "eta = %.2f\t", eta);
