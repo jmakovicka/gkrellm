@@ -1124,18 +1124,28 @@ detach_from_terminal(void)
 #endif /* !defined(WIN32) */
 
 
-static void
+static int
 drop_privileges(void)
 	{
 #if !defined(WIN32)
+	int r;
 	if (drop_privs.gid > (uid_t)0)
 		{
-		(void) setgroups((size_t)0, (gid_t*)0);
-		(void) setgid(drop_privs.gid);
+		r = setgroups((size_t)0, (gid_t*)0);
+		if (r != 0)
+			return r;
+		r = setgid(drop_privs.gid);
+		if (r != 0)
+			return r;
 		}
 	if (drop_privs.uid > (uid_t)0)
-		(void) setuid(drop_privs.uid);
+		{
+		r = setuid(drop_privs.uid);
+		if (r != 0)
+			return r;
+		}
 #endif
+	return 0;
 	}
 
 
@@ -1201,7 +1211,12 @@ gkrellmd_run(gint argc, gchar **argv)
 
 	make_pidfile();
 	gkrellm_sys_main_init();
-	drop_privileges();
+	if (drop_privileges() != 0)
+		{
+		g_warning("Failed to drop privileges: %s\n", strerror(errno));
+		gkrellm_sys_main_cleanup();
+		return 1;
+		}
 
 	_GK.start_time = time(0);
 	if (_GK.update_HZ < 1 || _GK.update_HZ > 10)
