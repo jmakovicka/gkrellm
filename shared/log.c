@@ -164,7 +164,7 @@ gkrellm_log_handler(G_GNUC_UNUSED const gchar *log_domain, GLogLevelFlags log_le
 	const gchar *message, G_GNUC_UNUSED gpointer user_data)
 	{
 	gchar *localized_message;
-	gint i;
+	guint i;
 	GkrellmLogFacility *f;
 
 	localized_message = g_locale_from_utf8(message, -1, NULL, NULL, NULL);
@@ -206,7 +206,7 @@ gkrellm_log_init()
 void
 gkrellm_log_cleanup()
 	{
-	gint i;
+	guint i;
 	GkrellmLogFacility *f;
 
 	if (!s_log_facility_ptr_array)
@@ -231,7 +231,7 @@ gkrellm_log_register(
 	GkrellmLogCleanupFunc cleanup)
 	{
 	GkrellmLogFacility *f;
-	gint i;
+	guint i;
 
 	if (!s_log_facility_ptr_array)
 		return FALSE; // gkrellm_log_init() not called yet
@@ -260,7 +260,7 @@ gkrellm_log_register(
 gboolean
 gkrellm_log_unregister(GkrellmLogFunc log)
 	{
-	gint i;
+	guint i;
 	GkrellmLogFacility *f;
 
 	if (!s_log_facility_ptr_array)
