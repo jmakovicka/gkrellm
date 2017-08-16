@@ -92,7 +92,7 @@ gkrellm_log_file_cleanup()
 	}
 
 static void
-gkrellm_log_file_log(GLogLevelFlags log_level, const gchar *message)
+gkrellm_log_file_log(G_GNUC_UNUSED GLogLevelFlags log_level, const gchar *message)
 	{
 	time_t raw_time;
 	char *local_time_str;
@@ -160,8 +160,8 @@ gkrellm_log_to_terminal(GLogLevelFlags log_level, const gchar *message)
 
 //! Handler that receives all the log-messages first
 static void
-gkrellm_log_handler(const gchar *log_domain, GLogLevelFlags log_level,
-	const gchar *message, gpointer user_data)
+gkrellm_log_handler(G_GNUC_UNUSED const gchar *log_domain, GLogLevelFlags log_level,
+	const gchar *message, G_GNUC_UNUSED gpointer user_data)
 	{
 	gchar *localized_message;
 	gint i;
