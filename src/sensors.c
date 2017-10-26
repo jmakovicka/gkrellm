@@ -1669,7 +1669,7 @@ gkrellm_init_sensor_monitor(void)
   |  to composite CPU on a SMP machine.
   |
   |  2.1.15 scales sensor factor/offset values by SENSOR_FLOAT_FACTOR to avoid
-  |  writting decimal points in the config.  This is not backwards compatible
+  |  writing decimal points in the config.  This is not backwards compatible
   |  with the pre 2.1.15 sensor_config format hence the config file name
   |  change to sensor-config.  But sensor_config is forward compatible
   |  since the float factor defaults to 1.0.

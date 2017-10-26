@@ -347,7 +347,7 @@ setup_proc_scaling(void)
 
 	res = gkrellm_get_chartconfig_grid_resolution(cp->config);
 
-	/* Since grid_resolution is set for load, set krell_full_scale explicitely
+	/* Since grid_resolution is set for load, set krell_full_scale explicitly
 	|  to get what I want, which is 10 forks full scale.
 	|  When res or number of grids is changed, scale all fork data to keep a
 	|  fixed 50 forks/sec max on the chart.

@@ -663,7 +663,7 @@ reset_text_layer_pixmap_decal_region(GkrellmPanel *p, GkrellmDecal *d)
   |  a decal's extents.  So when scrolling, a slow Pango redraw at each scroll
   |  step can be avoided if the text string has not changed.
   |  There are a couple of limitations because it's impossible to generate a
-  |  stencil bitmask of Pango rendered text (Pango doesn't allow writting to
+  |  stencil bitmask of Pango rendered text (Pango doesn't allow writing to
   |  depth 1 and it looks at the background pixmap colors as it renders):
   |    1) A scroll text decal is not transparent and will hide any objects
   |       underneath it, so when this condition is detected, scroll drawing

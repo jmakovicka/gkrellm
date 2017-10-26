@@ -1569,7 +1569,7 @@ gkrellm_save_theme_config(void)
 	gchar	*path;
 
 	/* Assume gkrellm -t is for testing and don't save theme config changes.
-	|  Similary for _GK.demo.
+	|  Similarly for _GK.demo.
 	*/
 	if (!theme_modified || _GK.command_line_theme || _GK.demo || _GK.no_config)
 		return;

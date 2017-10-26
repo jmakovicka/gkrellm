@@ -549,7 +549,7 @@ The reasons for this choice are a) efficiency (though it might be possible
 to open/close /dev/sysmon each time a reading is needed without major
 performance issue) and b) as of october 2001, there's a bug in the
 envsys(4) driver which sometimes causes deadlocks when processes try to
-access simultaneoulsy /dev/sysmon  (see NetBSD PR#14368). A (quick and
+access simultaneously /dev/sysmon  (see NetBSD PR#14368). A (quick and
 dirty) workaround for this is to monopolize the driver :)
 
 

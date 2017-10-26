@@ -139,7 +139,7 @@ void	gkrellm_proc_assign_users(gint n_users);
 |      the device numbers to an identifying name.  It may also set an order
 |      value for the name to control the stacking order of the disk chart.
 |  If gkrellm_disk_assign_data_by_name() is used, then an order may be
-|      optionally specifed with gkrellm_sys_disk_order_from_name().
+|      optionally specified with gkrellm_sys_disk_order_from_name().
 |      (the default order of -1 simply appends disk charts as data for them
 |      is reported).  After this function is called for a disk, the function
 |      gkrellm_disk_subdisk_assign_data_by_name() may be called for subdisk

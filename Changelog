@@ -38,7 +38,7 @@ GKrellM Changelog
 	* Patch from Gerard Neil: Skip autofs mounts in free disk space polling
 	* Patch from Gerard Neil: Handle cifs as remote filesystem to use longer
 	  nfs-timeout polling interval
-	* Patch from Alexandre Rostovtsev: Explicitely link against gmodule-2.0
+	* Patch from Alexandre Rostovtsev: Explicitly link against gmodule-2.0
 	* Add support for GPU-Z sensor information on Windows
 	* Increase minimum required GLib version to 2.32, some parts of gkrellm
 	  use newer GLib API
@@ -151,7 +151,7 @@ GKrellM Changelog
 	        Use unicode function calls.
 	        Use getaddrinfo() on win32.
 	        Support CoreTemp application for getting cpu temperatures.
-	        Redo sensor-handling to support multipe sensor backends.
+	        Redo sensor-handling to support multiple sensor backends.
 	        Make Proc monitor work and properly count # of logged in users.
 	        Mem monitor displays cache bytes.
 	        System name shows some new windows versions.

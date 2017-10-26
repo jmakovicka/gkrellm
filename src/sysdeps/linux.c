@@ -4036,7 +4036,7 @@ gkrellm_sys_sensors_init(void)
 
 	sensors_nvidia_smi_read(TRUE);
 
-	/* nvidia-settings GPU core & ambient temperatues
+	/* nvidia-settings GPU core & ambient temperatures
 	*/
 	cnt = sensors_nvidia_settings_ngpus();
 	ngpus_added = 0;

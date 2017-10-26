@@ -324,7 +324,7 @@ check_maildir(Mailbox *mbox)
   |  But, new mail arriving (writing mailbox) sets st_mtime while reading
   |  the mailbox (mail program reading) sets st_atime.  So the test
   |  st_atime > st_mtime is testing if mbox has been read since last new mail.
-  |  Mail readers may restore st_mtime after writting status.
+  |  Mail readers may restore st_mtime after writing status.
   |  And Netscape mail does status with X-Mozilla-Status: xxxS
   |    where S is bitwise or of status flags:
   |    1: read  2: replied  4: marked  8: deleted
