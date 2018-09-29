@@ -1787,6 +1787,11 @@ read_server_setup(gint fd)
 void
 gkrellm_client_mode_disconnect(void)
 	{
+	if (client_input_id != 0)
+		{
+		gdk_input_remove(client_input_id);
+		client_input_id = 0;
+		}
 	if (client_fd >= 0)
 		{
 		gkrellm_debug(DEBUG_CLIENT, "gkrellm_client_mode_disconnect(); " \
@@ -1795,8 +1800,6 @@ gkrellm_client_mode_disconnect(void)
 		}
 	client_fd = -1;
 	server_alive = FALSE;
-	gdk_input_remove(client_input_id);
-	client_input_id = 0;
 	}
 
 static void
