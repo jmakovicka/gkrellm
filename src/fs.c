@@ -810,7 +810,7 @@ fs_update(void)
 				if (fs->blocks > 2147483648LL)
 					fs->krell_factor = 1024 * 1024;
 				else if (fs->blocks > 2097152LL)
-					fs->krell_factor = 1024 * 1024;
+					fs->krell_factor = 1024;
 				else
 					fs->krell_factor = 1;
 				}
