@@ -1764,7 +1764,7 @@ net_stat_set_date_string(NetStat *ns, enum StatType stat_type, struct tm *t)
 	{
 	struct tm	tm  = *t,
 				tmx;
-	gchar		*utf8, buf[32], bufa[32], bufb[32];
+	gchar		*utf8, buf[128], bufa[32], bufb[32];
 
 	if (stat_type == DAY_STAT)
 		{

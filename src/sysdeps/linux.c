@@ -709,7 +709,7 @@ static void
 linux_read_proc_partitions_or_sysfs(void)
 	{
 	FILE		*f, *sf;
-	gchar		buf[1024], part[128], disk[128], sysfspath[256];
+	gchar		buf[1024], part[128], disk[128], sysfspath[300];
 	gint		major, minor, n;
 	gulong		sectors, rd, wr;
 	gboolean	is_MD;

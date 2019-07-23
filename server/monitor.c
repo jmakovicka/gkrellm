@@ -740,7 +740,7 @@ serve_inet_data(GkrellmdMonitor *mon, gboolean first_serve)
 	InetData	*in;
 	ActiveTCP	*tcp;
 	GList		*list;
-	gchar		buf[128], *cp;
+	gchar		buf[NI_MAXHOST + 128], *cp;
 #if defined(INET6) && defined(HAVE_GETADDRINFO)
 	struct sockaddr_in6	sin6;
 	char		addrbuf[NI_MAXHOST];

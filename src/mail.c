@@ -355,6 +355,7 @@ static gint		style_id;
 #ifndef HAVE_GNUTLS
 static GMutex		**ssl_locks;
 
+#if defined(OPENSSL_VERSION_NUMBER) && (OPENSSL_VERSION_NUMBER < 0x10100000L)
 static void
 ssl_locking_cb(int mode, int n, const char *file, int line)
 	{
@@ -363,6 +364,7 @@ ssl_locking_cb(int mode, int n, const char *file, int line)
 	else
 		g_mutex_unlock(ssl_locks[n]);
 	}
+#endif
 #endif
 #endif
 

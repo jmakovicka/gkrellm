@@ -656,10 +656,10 @@ get_connection_string_thread(void *data)
 	} ss;
 	gint					salen, flag = 0;
 	gchar					hbuf[NI_MAXHOST];
-	gchar					buf[NI_MAXHOST + 10];
+	gchar					buf[NI_MAXHOST + 64];
 #else
 	struct hostent			*hostent;
-	gchar					buf[64];
+	gchar					buf[128];
 #endif
 	gchar					*remote_host, *udp_note;
 

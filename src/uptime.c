@@ -92,7 +92,7 @@ draw_upminutes(gint minutes)
 	GkrellmTextstyle	*ts;
 	gint				w1, w2, w;
 	gint				days, hours;
-	gchar				buf1[16], buf2[16], *s;
+	gchar				buf1[64], buf2[64], *s;
 
 	ts = gkrellm_meter_textstyle(style_id);
 	hours = minutes / 60;
