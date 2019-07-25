@@ -1,7 +1,7 @@
 /* GKrellM
-|  Copyright (C) 1999-2014 Bill Wilson
+|  Copyright (C) 1999-2019 Bill Wilson
 |                2002      Bill Nalen
-|                2007-2014 Stefan Gehn
+|                2007-2019 Stefan Gehn
 |
 |  Authors:  Bill Wilson    billw@gkrellm.net
 |            Bill Nalen     bill@nalens.com

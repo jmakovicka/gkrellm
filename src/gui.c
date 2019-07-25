@@ -1,5 +1,5 @@
 /* GKrellM
-|  Copyright (C) 1999-2014 Bill Wilson
+|  Copyright (C) 1999-2019 Bill Wilson
 |
 |  Author:  Bill Wilson    billw@gkrellm.net
 |  Latest versions might be found at:  http://gkrellm.net
@@ -764,7 +764,7 @@ create_about_tab(GtkWidget *vbox)
 				"Released under the GNU General Public License"),
 				GKRELLM_VERSION_MAJOR, GKRELLM_VERSION_MINOR,
 				GKRELLM_VERSION_REV, GKRELLM_EXTRAVERSION,
-				"1999-2016");
+				"1999-2019");
 	label = gtk_label_new(buf);
 	gtk_label_set_justify(GTK_LABEL(label), GTK_JUSTIFY_CENTER);
 	g_free(buf);

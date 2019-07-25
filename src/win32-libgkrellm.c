@@ -1,6 +1,6 @@
  /* GKrellM Windows Portion
 |  Copyright (C) 2002 Bill Nalen
-|                2007-2014 Stefan Gehn
+|                2007-2019 Stefan Gehn
 |
 |  Authors:  Bill Nalen     bill@nalens.com
 |            Stefan Gehn    stefan+gkrellm@srcbox.net
