@@ -50,41 +50,41 @@ extern void solaris_list_harddisks(void);
 
 void
 gkrellm_sys_main_init(void)
-	{
-	/* 
-	 * Most of stats (cpu, proc, disk, memory, net and uptime) are 
-	 * unavailable if kstat_open() failed. So we just exit in that case.
-	 */
-	if ((kc = kstat_open()) == NULL) {
-		perror("kstat_open");
-		exit(1);
-	}
+{
+    /* 
+     * Most of stats (cpu, proc, disk, memory, net and uptime) are 
+     * unavailable if kstat_open() failed. So we just exit in that case.
+     */
+    if ((kc = kstat_open()) == NULL) {
+        perror("kstat_open");
+        exit(1);
+    }
 
-	/*
-	 * kvm is utilized solely for getting a value for proc.n_forks 
-	 * from kernel variable called mpid. Even if kvm_open() fails,
-	 * we proceed without it.
-	 */
-	if ((kd = kvm_open(NULL, NULL, NULL, O_RDONLY, NULL)) != NULL) { 
-		kvm_nlist(kd, nl);
-	}
+    /*
+     * kvm is utilized solely for getting a value for proc.n_forks 
+     * from kernel variable called mpid. Even if kvm_open() fails,
+     * we proceed without it.
+     */
+    if ((kd = kvm_open(NULL, NULL, NULL, O_RDONLY, NULL)) != NULL) { 
+        kvm_nlist(kd, nl);
+    }
 
-        /*
-         * a function called by the following requires sys gid privilege.
-         * the following function should be performed here just for that reason.
-         */ 
-        solaris_list_harddisks();
+    /*
+     * a function called by the following requires sys gid privilege.
+     * the following function should be performed here just for that reason.
+     */ 
+    solaris_list_harddisks();
 
-        if (setgid(getgid()) != 0) {
-		perror("Failed to drop setgid privilege");
-		exit(1);
-        }
-	}
+    if (setgid(getgid()) != 0) {
+        perror("Failed to drop setgid privilege");
+        exit(1);
+    }
+}
 
 void
 gkrellm_sys_main_cleanup(void)
-	{
-	}
+{
+}
 
 
 /* ===================================================================== */
@@ -112,11 +112,11 @@ gkrellm_sys_cpu_read_data(void)
             perror("kstat_read");
             continue;
         }
-		gkrellm_cpu_assign_data(ksp->ks_instance,
-				cs.cpu_sysinfo.cpu[CPU_USER],
-				cs.cpu_sysinfo.cpu[CPU_WAIT],
-				cs.cpu_sysinfo.cpu[CPU_KERNEL],
-				cs.cpu_sysinfo.cpu[CPU_IDLE]);
+        gkrellm_cpu_assign_data(ksp->ks_instance,
+                cs.cpu_sysinfo.cpu[CPU_USER],
+                cs.cpu_sysinfo.cpu[CPU_WAIT],
+                cs.cpu_sysinfo.cpu[CPU_KERNEL],
+                cs.cpu_sysinfo.cpu[CPU_IDLE]);
 
     }
 }
@@ -130,7 +130,7 @@ gboolean
 gkrellm_sys_cpu_init() {
     extern kstat_ctl_t *kc;
     kstat_t *ksp;
-	gint	n_cpus = 0;
+    gint    n_cpus = 0;
 
     if(kstat_chain_update(kc) == -1) {
         perror("kstat_chain_update");
@@ -141,12 +141,12 @@ gkrellm_sys_cpu_init() {
         if (strcmp(ksp->ks_module, "cpu_stat")) 
             continue;
         if (kstat_read(kc, ksp, NULL) != -1) {
-			gkrellm_cpu_add_instance(ksp->ks_instance);
-			++n_cpus;
-			}
+            gkrellm_cpu_add_instance(ksp->ks_instance);
+            ++n_cpus;
+            }
     }
-	gkrellm_cpu_set_number_of_cpus(n_cpus);
-	return TRUE;
+    gkrellm_cpu_set_number_of_cpus(n_cpus);
+    return TRUE;
 }
 
 
@@ -167,7 +167,7 @@ gkrellm_sys_proc_read_data(void)
 {
 
     double avenrun[LOADAVG_NSTATS], fload = 0;
-	guint	n_processes = 0, n_forks = 0; 
+    guint   n_processes = 0, n_forks = 0; 
     int last_pid;
     extern kstat_ctl_t *kc;
     kstat_t *ksp;
@@ -203,15 +203,15 @@ gkrellm_sys_proc_read_data(void)
     /* NOTE: code to get 'n_running' is not implemented (stays untouched).
      * but it wouldn't do any harm since nobody seems to refer to it.
      */
-	gkrellm_proc_assign_data(n_processes, 0, n_forks, fload);
+    gkrellm_proc_assign_data(n_processes, 0, n_forks, fload);
 }
 
 
 void
 gkrellm_sys_proc_read_users(void)
-	{
+{
     static struct utmp *utmpp;
-	gint	n_users;
+    gint    n_users;
 
     n_users = 0;
     setutent();
@@ -219,14 +219,14 @@ gkrellm_sys_proc_read_users(void)
         if (utmpp->ut_type == USER_PROCESS && utmpp->ut_name[0] != '\0')
             n_users++;
     }    
-	gkrellm_proc_assign_users(n_users);
+    gkrellm_proc_assign_users(n_users);
 }
 
 gboolean
 gkrellm_sys_proc_init(void)
-    {
-	return TRUE;
-	}
+{
+    return TRUE;
+}
 
 
 
@@ -270,16 +270,16 @@ GList *hard_disk_list;
 
 gchar *
 gkrellm_sys_disk_name_from_device(gint device_number, gint unit_number,
-			gint *order)
-	{
-	return NULL;	/* Disk data by device not implemented in Solaris */
-	}
+            gint *order)
+{
+    return NULL;    /* Disk data by device not implemented in Solaris */
+}
 
 gint
 gkrellm_sys_disk_order_from_name(const gchar *name)
-	{
-	return -1;  /* Append as added */
-	}
+{
+    return -1;  /* Append as added */
+}
 
 void
 gkrellm_sys_disk_read_data(void)
@@ -296,37 +296,37 @@ gkrellm_sys_disk_read_data(void)
         return;
     }
     for (ksp = kc->kc_chain; ksp; ksp = ksp->ks_next) {
-	if (ksp->ks_type != KSTAT_TYPE_IO && 
-	    strcmp(ksp->ks_class, "disk")) {
-		continue;
-	}
-	for (list = hard_disk_list; list; list = list->next) {
-            drive = (probed_harddisk *)list->data;
+        if (ksp->ks_type != KSTAT_TYPE_IO || 
+            strcmp(ksp->ks_class, "disk")) {
+            continue;
+        }
+        for (list = hard_disk_list; list; list = list->next) {
+                drive = (probed_harddisk *)list->data;
 
-            if (strcmp(drive->name, ksp->ks_name))
-                continue;
+                if (strcmp(drive->name, ksp->ks_name))
+                    continue;
 
-            memset((void *)&kios, 0, sizeof(kstat_io_t));
+                memset((void *)&kios, 0, sizeof(kstat_io_t));
 
-            if (kstat_read(kc, ksp, &kios) == -1) {
-		perror("kstat_read");
-		return;
-	    }
+                if (kstat_read(kc, ksp, &kios) == -1) {
+                    perror("kstat_read");
+                    return;
+                }
 
-	    gkrellm_disk_assign_data_by_name(drive->name,
-						kios.nread, kios.nwritten, FALSE);
-	    /* We don't need to keep searching the list
-	     * for a matching hard drive name if we've reached here */
-	    break;
-	}
+            gkrellm_disk_assign_data_by_name(drive->name,
+                            kios.nread, kios.nwritten, FALSE);
+            /* We don't need to keep searching the list
+             * for a matching hard drive name if we've reached here */
+            break;
+        }
     }
 }
 
 gboolean
 gkrellm_sys_disk_init(void)
-	{
-	return TRUE;
-	}
+{
+    return TRUE;
+}
 
 
   /* Is this needed any longer? */
@@ -488,29 +488,23 @@ check_media_type(kstat_t *ksp) {
                 return -1; /* EACCESS (unless setgid sys) or suchlike */
             }
         }
-#if 0
-	/* Not supported on Solaris 7 */
-        if (ioctl(fd, DKIOCGMEDIAINFO, &dk) < 0)
-#else
-	if (ioctl(fd, DKIOCREMOVABLE, &dkRemovable) < 0)
-#endif
-	{
-            close(fd);
-            di_devfs_path_free(phys_path);
-            return -1;
+        if (ioctl(fd, DKIOCREMOVABLE, &dkRemovable) < 0)
+        {
+                close(fd);
+                di_devfs_path_free(phys_path);
+                return -1;
         }
-#if 0
-        if (dk.dki_media_type == DK_FIXED_DISK)
-#else
+
         if (!dkRemovable)
-#endif
-	{
-	   close(fd);
-	   di_devfs_path_free(phys_path);
-	   return 1;
+        {
+           close(fd);
+           di_devfs_path_free(phys_path);
+           return 1;
         }
-	return 0;
+
+        return 0;
     }
+
     return -1; /* shouldn't be reached */
 } 
 
@@ -674,7 +668,7 @@ gkrellm_sys_inet_read_tcp_data() {
                 tcp.local_port          = tp6->tcp6ConnLocalPort;
                 tcp.remote_port         = tp6->tcp6ConnRemPort;
                 memcpy(&tcp.remote_addr6, &tp6->tcp6ConnRemAddress, 
-			sizeof(struct in6_addr));
+            sizeof(struct in6_addr));
                 tcp.family              = AF_INET6;
                 tcp_status = (tp6->tcp6ConnState == MIB2_TCP_established);
                 if (tcp_status == TCP_ALIVE)
@@ -690,9 +684,9 @@ gkrellm_sys_inet_read_tcp_data() {
 
 gboolean
 gkrellm_sys_inet_init(void)
-	{
-	return TRUE;
-	}
+{
+    return TRUE;
+}
 
 
 /* ===================================================================== */
@@ -710,36 +704,38 @@ gkrellm_sys_inet_init(void)
 
 void
 gkrellm_sys_net_read_data(void)
-	{
-	gulong	rx, tx;
+{
+    gulong  rx, tx;
     extern kstat_ctl_t *kc;
     kstat_t *ksp;
     kstat_named_t *knp;
 
-	if (kstat_chain_update(kc) == -1) {
-			perror("kstat_chain_update");
-			return;
-	}
-
-    for (ksp = kc->kc_chain; ksp; ksp = ksp->ks_next) {
-	    if (!strcmp(ksp->ks_class, "net")) {
-		    kstat_read(kc, ksp, NULL);
-
-		    knp = kstat_data_lookup(ksp, "rbytes");
-		    if (knp == NULL)
-			    continue;
-		    rx = knp->value.ui32;
-
-		    knp = kstat_data_lookup(ksp, "obytes");
-		    if (knp == NULL)
-			    continue;
-		    tx = knp->value.ui32;
-
-		    gkrellm_net_assign_data(ksp->ks_name, rx, tx);
-	    }
+    if (kstat_chain_update(kc) == -1) {
+            perror("kstat_chain_update");
+            return;
     }
 
-	}
+    for (ksp = kc->kc_chain; ksp; ksp = ksp->ks_next) {
+        if (!strcmp(ksp->ks_class, "net") && !strcmp(ksp->ks_name, "link")) {
+            kstat_read(kc, ksp, NULL);
+
+            knp = kstat_data_lookup(ksp, "rbytes");
+            if (knp == NULL) 
+                continue;
+
+            rx = knp->value.ui32;
+
+            knp = kstat_data_lookup(ksp, "obytes");
+            if (knp == NULL) 
+                continue;
+
+            tx = knp->value.ui32;
+
+            gkrellm_net_assign_data(ksp->ks_name, rx, tx);
+        }
+    }
+
+}
 
 #if 0
 /* New way is for above gkrellm_sys_net_read_data() to just assign data
@@ -747,17 +743,17 @@ gkrellm_sys_net_read_data(void)
 */
 void
 gkrellm_sys_net_sync(void)
-	{
-    GList *list;	
+    {
+    GList *list;    
     int numifs, numifreqs;
     int i, sockfd;
     size_t bufsize;
-    gchar	*buf;
+    gchar   *buf;
     struct ifreq ifr, *ifrp;
     struct ifconf ifc;
 
     if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) 
-	return;
+    return;
     
     if (ioctl(sockfd, SIOCGIFNUM, (char *)&numifs) < 0) {
         perror("SIOCGIFNUM");
@@ -795,29 +791,29 @@ gkrellm_sys_net_sync(void)
     numifreqs = ifc.ifc_len / sizeof(struct ifreq);
 
     for (i = 0; i < numifreqs; i++, ifrp++)
-		{
-		memset((char *)&ifr, 0, sizeof(ifr));
-		strncpy(ifr.ifr_name, ifrp->ifr_name, sizeof(ifr.ifr_name));
-		if (!strncmp(ifr.ifr_name, "lo", 2)) 
-			continue;
-		if (ioctl(sockfd, SIOCGIFFLAGS, &ifr) < 0)
-			{
-			perror("SIOCGIFFLAGS");
-			continue;
-			}
-		if (ifr.ifr_flags & IFF_UP)
-			gkrellm_net_interface_is_up(ifr.ifr_name);
-    	}
+        {
+        memset((char *)&ifr, 0, sizeof(ifr));
+        strncpy(ifr.ifr_name, ifrp->ifr_name, sizeof(ifr.ifr_name));
+        if (!strncmp(ifr.ifr_name, "lo", 2)) 
+            continue;
+        if (ioctl(sockfd, SIOCGIFFLAGS, &ifr) < 0)
+            {
+            perror("SIOCGIFFLAGS");
+            continue;
+            }
+        if (ifr.ifr_flags & IFF_UP)
+            gkrellm_net_interface_is_up(ifr.ifr_name);
+        }
     free(buf);
     close(sockfd);
-	}
+    }
 #endif
 
 gboolean
 gkrellm_sys_net_isdn_online(void)
-	{
-	return FALSE;
-	}
+{
+    return FALSE;
+}
 
 void
 gkrellm_sys_net_check_routes(void)
@@ -826,12 +822,12 @@ gkrellm_sys_net_check_routes(void)
 
 gboolean
 gkrellm_sys_net_init(void)
-	{
-	gkrellm_net_set_lock_directory("/var/spool/locks");
-	gkrellm_net_add_timer_type_ppp("ipdptp0");
-	gkrellm_net_add_timer_type_ppp("ppp0");
-	return TRUE;
-	}
+{
+    gkrellm_net_set_lock_directory("/var/spool/locks");
+    gkrellm_net_add_timer_type_ppp("ipdptp0");
+    gkrellm_net_add_timer_type_ppp("ppp0");
+    return TRUE;
+}
 
 
 
@@ -849,7 +845,7 @@ void
 gkrellm_sys_mem_read_data() {
 
     gulong pagesize;
-	guint64	total, used = 0, free = 0;
+    guint64 total, used = 0, free = 0;
     static gulong pageshift = 0, physpages = 0;
     extern kstat_ctl_t *kc;
     kstat_t *ksp;
@@ -880,12 +876,12 @@ gkrellm_sys_mem_read_data() {
             used = total - free;
         }
     }
-	gkrellm_mem_assign_data(total, used, free, 0, 0, 0);
+    gkrellm_mem_assign_data(total, used, free, 0, 0, 0);
     if (swapctl(SC_AINFO, &ai) == -1) {
         perror("swapctl");
     }
-	swap_total = ai.ani_max;
-	swap_total <<= pageshift;
+    swap_total = ai.ani_max;
+    swap_total <<= pageshift;
 
     swap_used  = ai.ani_resv;
     swap_used  <<= pageshift;
@@ -899,16 +895,16 @@ gkrellm_sys_mem_read_data() {
 
 void
 gkrellm_sys_swap_read_data(void)
-	{
+{
     /* page in/out UNIMPLEMENTED */
-	gkrellm_swap_assign_data(swap_total, swap_used, 0, 0);
-	}
+    gkrellm_swap_assign_data(swap_total, swap_used, 0, 0);
+}
 
 gboolean
 gkrellm_sys_mem_init(void)
-	{
-	return TRUE;
-	}
+{
+    return TRUE;
+}
 
 
 /* ===================================================================== */
@@ -921,16 +917,16 @@ gkrellm_sys_mem_init(void)
 
 gboolean
 gkrellm_sys_fs_fstab_modified(void)
-	{
-	struct stat		s;
-	static time_t	fstab_mtime;
-	gint			modified = FALSE;
+{
+    struct stat     s;
+    static time_t   fstab_mtime;
+    gint            modified = FALSE;
 
-	if (stat("/etc/fstab", &s) == 0 && s.st_mtime != fstab_mtime)
-		modified = TRUE;
-	fstab_mtime = s.st_mtime;
-	return modified;
-	}
+    if (stat("/etc/fstab", &s) == 0 && s.st_mtime != fstab_mtime)
+        modified = TRUE;
+    fstab_mtime = s.st_mtime;
+    return modified;
+}
 
 
 void
@@ -944,11 +940,11 @@ gkrellm_sys_fs_get_fstab_list(){
     while (getvfsent(fp, &vfsbuf) == 0) {
         if (!vfsbuf.vfs_fstype || strcmp(vfsbuf.vfs_fstype, "ufs"))
             continue;
-		gkrellm_fs_add_to_fstab_list(
-				vfsbuf.vfs_mountp  ? vfsbuf.vfs_mountp  : "",
-				vfsbuf.vfs_special ? vfsbuf.vfs_special : "",				
-				vfsbuf.vfs_fstype  ? vfsbuf.vfs_fstype  : "",
-				vfsbuf.vfs_mntopts ? vfsbuf.vfs_mntopts : "");
+        gkrellm_fs_add_to_fstab_list(
+                vfsbuf.vfs_mountp  ? vfsbuf.vfs_mountp  : "",
+                vfsbuf.vfs_special ? vfsbuf.vfs_special : "",               
+                vfsbuf.vfs_fstype  ? vfsbuf.vfs_fstype  : "",
+                vfsbuf.vfs_mntopts ? vfsbuf.vfs_mntopts : "");
     }
 
     fclose(fp);
@@ -966,10 +962,10 @@ gkrellm_sys_fs_get_mounts_list(void){
         if (strcmp(mntbuf.mnt_fstype, "ufs") && 
                                   strcmp(mntbuf.mnt_fstype, "nfs"))
             continue;
-		gkrellm_fs_add_to_mounts_list(
-				mntbuf.mnt_mountp  ? mntbuf.mnt_mountp  : "",
-				mntbuf.mnt_special ? mntbuf.mnt_special : "",
-				mntbuf.mnt_fstype  ? mntbuf.mnt_fstype  : "");
+        gkrellm_fs_add_to_mounts_list(
+                mntbuf.mnt_mountp  ? mntbuf.mnt_mountp  : "",
+                mntbuf.mnt_special ? mntbuf.mnt_special : "",
+                mntbuf.mnt_fstype  ? mntbuf.mnt_fstype  : "");
     }
     fclose(fp);
 }
@@ -978,12 +974,12 @@ void
 gkrellm_sys_fs_get_fsusage(gpointer fs, gchar *dir){
     struct statvfs st;
 
-	if (dir && statvfs(dir, &st) == 0) {
-		gkrellm_fs_assign_fsusage_data(fs,
-					(gint64) st.f_blocks, (gint64) st.f_bavail,
-					(glong) st.f_bfree, (glong) st.f_bsize);
+    if (dir && statvfs(dir, &st) == 0) {
+        gkrellm_fs_assign_fsusage_data(fs,
+                    (gint64) st.f_blocks, (gint64) st.f_bavail,
+                    (glong) st.f_bfree, (glong) st.f_bsize);
     } else {
-		gkrellm_fs_assign_fsusage_data(fs, 0, 0, 0, 0);
+        gkrellm_fs_assign_fsusage_data(fs, 0, 0, 0, 0);
     } 
 }
 
@@ -992,19 +988,19 @@ eject_solaris_cdrom(gchar *device) {
 #if defined(CDROMEJECT)
         gint    d;
 
-		if ((d = open(device, O_RDONLY)) >= 0) {
-				ioctl(d, CDROMEJECT);
-				close(d);
+        if ((d = open(device, O_RDONLY)) >= 0) {
+                ioctl(d, CDROMEJECT);
+                close(d);
         }
 #endif
 }
 
 gboolean
 gkrellm_sys_fs_init(void)
-	{
-	gkrellm_fs_setup_eject(NULL, NULL, eject_solaris_cdrom, NULL);
-	return TRUE;
-	}
+{
+    gkrellm_fs_setup_eject(NULL, NULL, eject_solaris_cdrom, NULL);
+    return TRUE;
+}
 
 
 /* ===================================================================== */
@@ -1016,9 +1012,9 @@ gkrellm_sys_battery_read_data(void)
  
 gboolean
 gkrellm_sys_battery_init()
- 	{
-	  return FALSE;
- 	}
+{
+      return FALSE;
+}
  
 /* ===================================================================== */
 /* Uptime monitor interface */
@@ -1028,9 +1024,9 @@ gkrellm_sys_battery_init()
 
 time_t
 gkrellm_sys_uptime_read_uptime(void)
-	{
-	return (time_t) 0;  /* Will calculate using base_uptime */
-	}
+{
+    return (time_t) 0;  /* Will calculate using base_uptime */
+}
 
 gboolean
 gkrellm_sys_uptime_init(void) {
@@ -1060,7 +1056,7 @@ gkrellm_sys_uptime_init(void) {
 
     base_uptime = now - boot;
     base_uptime += 30;
-	gkrellm_uptime_set_base_uptime(base_uptime);
+    gkrellm_uptime_set_base_uptime(base_uptime);
 
     return (base_uptime == (time_t) 0) ? FALSE : TRUE; 
 }
@@ -1073,24 +1069,24 @@ gkrellm_sys_uptime_init(void) {
 gboolean
 gkrellm_sys_sensors_init(void)
 {
-	return FALSE;
+    return FALSE;
 }
 
 gboolean
 gkrellm_sys_sensors_get_temperature(gchar *name, gint id, gint iodev, gint inter, gfloat *t)
 {
-	return FALSE;
+    return FALSE;
 }
 
 gboolean
 gkrellm_sys_sensors_get_fan(gchar *name, gint id, gint iodev, gint inter, gfloat *t)
 {
-	return FALSE;
+    return FALSE;
 }
 
 gboolean
 gkrellm_sys_sensors_get_voltage(gchar *name, gint id, gint iodev, gint inter, gfloat *t)
 {
-	return FALSE;
+    return FALSE;
 }
 
