@@ -296,17 +296,28 @@ gkrellm_sys_disk_read_data(void)
         return;
     }
     for (ksp = kc->kc_chain; ksp; ksp = ksp->ks_next) {
+	if (ksp->ks_type != KSTAT_TYPE_IO && 
+	    strcmp(ksp->ks_class, "disk")) {
+		continue;
+	}
 	for (list = hard_disk_list; list; list = list->next) {
             drive = (probed_harddisk *)list->data;
 
-            if(strcmp(drive->name, ksp->ks_name))
+            if (strcmp(drive->name, ksp->ks_name))
                 continue;
 
             memset((void *)&kios, 0, sizeof(kstat_io_t));
-            kstat_read(kc, ksp, &kios);
+
+            if (kstat_read(kc, ksp, &kios) == -1) {
+		perror("kstat_read");
+		return;
+	    }
 
 	    gkrellm_disk_assign_data_by_name(drive->name,
 						kios.nread, kios.nwritten, FALSE);
+	    /* We don't need to keep searching the list
+	     * for a matching hard drive name if we've reached here */
+	    break;
 	}
     }
 }
@@ -1000,16 +1011,15 @@ gkrellm_sys_fs_init(void)
 /* Battery monitor interface */
 void
 gkrellm_sys_battery_read_data(void)
-	{
-	}
-
+{
+}
+ 
 gboolean
 gkrellm_sys_battery_init()
-	{
-	return FALSE;
-	}
-
-
+ 	{
+	  return FALSE;
+ 	}
+ 
 /* ===================================================================== */
 /* Uptime monitor interface */
 
