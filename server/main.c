@@ -473,22 +473,43 @@ allow_host(GkrellmdClient *client, struct sockaddr *sa, socklen_t salen)
 	addr = inet_ntoa(((struct sockaddr_in *)sa)->sin_addr);
 #endif
 
+	gkrellm_debug(DEBUG_SERVER, "Connect from %s[%s]\n", hostname ? hostname : "[unknown]", addr);
+
 	client->hostname = g_strdup(hostname ? hostname : addr);
 
 	if (!allow_host_list)
+		{
+		gkrellm_debug(DEBUG_SERVER, "Client %s[%s] allowed, no allowed hosts list\n", (hostname ? hostname : "[unknown]"), addr);
 		return TRUE;
+		}
 
 	for (list = allow_host_list; list; list = list->next)
 		{
 		allowed = (gchar *) list->data;
-		if (   (hostname && !strcmp(hostname, allowed))
-			|| (addr && !strcmp(addr, allowed))
-			|| !strcmp("ALL", allowed)
-		   )
+
+		if (!strcmp("ALL", allowed))
+			{
+			gkrellm_debug(DEBUG_SERVER, "Client %s[%s] matches ALL\n", (hostname ? hostname : "[unknown]"), addr);
 			return TRUE;
+			}
+
+		if (hostname && !strcmp(hostname, allowed))
+			{
+			gkrellm_debug(DEBUG_SERVER, "Client %s[%s] matches hostname %s\n", (hostname ? hostname : "[unknown]"), addr, allowed);
+			return TRUE;
+			}
+
+		if (addr && !strcmp(addr, allowed))
+			{
+			gkrellm_debug(DEBUG_SERVER, "Client %s[%s] matches address %s\n", (hostname ? hostname : "[unknown]"), addr, allowed);
+			return TRUE;
+			}
 
 		if (addr && cidr_match(sa, salen, allowed))
+			{
+			gkrellm_debug(DEBUG_SERVER, "Client %s[%s] matches CIDR address %s\n", (hostname ? hostname : "[unknown]"), addr, allowed);
 			return TRUE;
+			}
 
 		/* Check for simple IPv4 subnet match.  Worry later about ranges and
 		|  other hosts_access type patterns.
@@ -498,7 +519,12 @@ allow_host(GkrellmdClient *client, struct sockaddr *sa, socklen_t salen)
 			&& *(s + 1) == '*' && *(s + 2) == '\0'
 			&& !strncmp(addr, allowed, (gint) (s - allowed + 1))
 		   )
-				return TRUE;
+			{
+			gkrellm_debug(DEBUG_SERVER, "Client %s[%s] matches IPv4 wildcard %s\n", (hostname ? hostname : "[unknown]"), addr, allowed);
+			return TRUE;
+			}
+
+		gkrellm_debug(DEBUG_SERVER, "Client %s[%s] not matched by %s\n", (hostname ? hostname : "[unknown]"), addr, allowed);
 		}
 
 	snprintf(buf, sizeof(buf), _("Connection not allowed from %s\n"),
