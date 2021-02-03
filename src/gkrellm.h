@@ -1,5 +1,5 @@
 /* GKrellM
-|  Copyright (C) 1999-2019 Bill Wilson
+|  Copyright (C) 1999-2021 Bill Wilson
 |
 |  Author:  Bill Wilson    billw@gkrellm.net
 |  Latest versions might be found at:  http://gkrellm.net
@@ -262,8 +262,8 @@ typedef struct
 #define DF_LOCAL_PIXMAPS		0x4
 #define	DF_OVERLAY_PIXMAPS		0x8
 #define	DF_TEXT_OVERLAPS		0x10
-#define	DF_SCROLL_TEXT_DIVERTED	0x20
-#define	DF_SCROLL_TEXT_CENTER	0x40
+#define	DF_TEXT_CENTER			0x20
+#define	DF_SCROLL_TEXT_DIVERTED	0x40
 #define	DF_SCROLL_TEXT_H_LOOP	0x80
 #define	DF_SCROLL_TEXT_V_LOOP	0x100
 #define	DF_TEXT_USE_MARKUP		0x200

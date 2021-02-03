@@ -1,5 +1,5 @@
 /* GKrellM
-|  Copyright (C) 1999-2019 Bill Wilson
+|  Copyright (C) 1999-2021 Bill Wilson
 |
 |  Author:  Bill Wilson    billw@gkrellm.net
 |  Latest versions might be found at:  http://gkrellm.net
@@ -542,14 +542,14 @@ gkrellm_decal_scroll_text_align_center(GkrellmDecal *d, gboolean center)
 
 	if (!d)
 		return;
-	prev_center = d->flags & DF_SCROLL_TEXT_CENTER;
+	prev_center = d->flags & DF_TEXT_CENTER;
 	if ((center && prev_center) || (!center && !prev_center))
 		return;
 
 	if (center)
-		d->flags |= DF_SCROLL_TEXT_CENTER;
+		d->flags |= DF_TEXT_CENTER;
 	else
-		d->flags &= ~DF_SCROLL_TEXT_CENTER;
+		d->flags &= ~DF_TEXT_CENTER;
 	d->modified = TRUE;
 	}
 
@@ -612,7 +612,7 @@ decal_scroll_text_layout(GkrellmDecal *d, gchar *text, gint *yink)
 	ts = &d->text_style;
 	layout = gtk_widget_create_pango_layout(gkrellm_get_top_window(), NULL);
 	pango_layout_set_spacing(layout, 0);
-	if (d->flags & DF_SCROLL_TEXT_CENTER)
+	if (d->flags & DF_TEXT_CENTER)
 		pango_layout_set_alignment(layout, PANGO_ALIGN_CENTER);
 	pango_layout_set_font_description(layout, ts->font);
 	if (d->flags & DF_TEXT_USE_MARKUP)
@@ -757,7 +757,7 @@ gkrellm_decal_scroll_text_set_internal(GkrellmPanel *p, GkrellmDecal *d,
 
 	if (dx >= 0)
 		pixbuf = gdk_pixbuf_get_from_drawable(NULL, p->bg_pixmap, NULL,
-				d->x + ((d->flags & DF_SCROLL_TEXT_CENTER) ? dx / 2 : 0), d->y,
+				d->x + ((d->flags & DF_TEXT_CENTER) ? dx / 2 : 0), d->y,
 				0, 0, d->scroll_width, d->h);
 	else
 		{

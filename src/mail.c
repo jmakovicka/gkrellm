@@ -1,5 +1,5 @@
 /* GKrellM
-|  Copyright (C) 1999-2019 Bill Wilson
+|  Copyright (C) 1999-2021 Bill Wilson
 |
 |  Author:  Bill Wilson    billw@gkrellm.net
 |  Latest versions might be found at:  http://gkrellm.net
@@ -1145,7 +1145,7 @@ check_pop3(Mailbox *mbox)
 		snprintf(line, sizeof(line), "%s%s", key, account->password);
 		g_free(challenge);
 		MD5Init(&ctx);
-		MD5Update(&ctx, line, strlen(line));
+		MD5Update(&ctx, (unsigned char *)line, strlen(line));
 		MD5Final(digest, &ctx);
 		for (i = 0;  i < 16;  i++)
 			{

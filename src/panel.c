@@ -1,5 +1,5 @@
 /* GKrellM
-|  Copyright (C) 1999-2019 Bill Wilson
+|  Copyright (C) 1999-2021 Bill Wilson
 |
 |  Author:  Bill Wilson    billw@gkrellm.net
 |  Latest versions might be found at:  http://gkrellm.net
@@ -657,7 +657,7 @@ panel_draw_decal_text_list(GdkPixmap *pixmap, GkrellmDecal *d)
 		y = tx->y_off;
 		if (d->flags & DF_SCROLL_TEXT_DIVERTED)
 			{
-			if (d->flags & DF_SCROLL_TEXT_CENTER)
+			if (d->flags & DF_TEXT_CENTER)
 				pango_layout_set_alignment(layout, PANGO_ALIGN_CENTER);
 			if (d->flags & DF_SCROLL_TEXT_H_LOOP)
 				{
@@ -693,6 +693,8 @@ panel_draw_decal_text_list(GdkPixmap *pixmap, GkrellmDecal *d)
 			}
 		else
 			{
+			if (d->flags & DF_TEXT_CENTER)
+				pango_layout_set_alignment(layout, PANGO_ALIGN_CENTER);
 			if (d->flags & DF_TEXT_USE_MARKUP)
 				pango_layout_set_markup(layout, tx->text, strlen(tx->text));
 			else

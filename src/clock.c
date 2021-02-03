@@ -1,5 +1,5 @@
 /* GKrellM
-|  Copyright (C) 1999-2019 Bill Wilson
+|  Copyright (C) 1999-2021 Bill Wilson
 |
 |  Author:  Bill Wilson    billw@gkrellm.net
 |  Latest versions might be found at:  http://gkrellm.net
@@ -272,6 +272,9 @@ create_calendar_panel(GtkWidget *vbox, gint first_create)
 	cal_string = strftime_format(cal_format, cal_alt_color_string);
 	d_cal = gkrellm_create_decal_text_markup(pcal, cal_string,
 				gkrellm_meter_textstyle(cal_style_id), style, -1, -1, -1);
+	/* Calendar formats with %n have multiple lines which should be centered.
+	*/
+	d_cal->flags |= DF_TEXT_CENTER;
 	g_free(cal_string);
 
 	gkrellm_panel_configure(pcal, NULL, style);
@@ -378,6 +381,9 @@ create_clock_panel(GtkWidget *vbox, gint first_create)
 	clock_string = strftime_format(clock_format, clock_alt_color_string);
 	d_clock = gkrellm_create_decal_text_markup(pclock, clock_string,
 				gkrellm_meter_textstyle(clock_style_id), style, -1, -1, -1);
+	/* Clock formats with %n have multiple lines which should be centered.
+	*/
+	d_clock->flags |= DF_TEXT_CENTER;
 	g_free(clock_string);
 
 	gkrellm_panel_configure(pclock, NULL, style);
