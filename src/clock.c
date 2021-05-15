@@ -593,12 +593,12 @@ static GtkWidget	*cal_format_combo_box,
 static void
 cb_clock_cal(GtkWidget *widget, gpointer data)
 	{
-	loop_chime_enable = GTK_TOGGLE_BUTTON(loop_chime_button)->active;
+	loop_chime_enable = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(loop_chime_button));
 
-	clock_enable = GTK_TOGGLE_BUTTON(clock_enable_button)->active;
+	clock_enable = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(clock_enable_button));
 	clock_visibility();
 
-	cal_enable = GTK_TOGGLE_BUTTON(cal_enable_button)->active;
+	cal_enable = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(cal_enable_button));
 	cal_visibility();
 
 	draw_cal();

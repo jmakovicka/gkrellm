@@ -1091,7 +1091,7 @@ cb_estimate_model(GtkWidget *entry, gpointer data)
 	gint	i = GPOINTER_TO_INT(data);
 
 	estimate_model[i] = 
-			GTK_TOGGLE_BUTTON(estimate_model_button[i])->active;
+			gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(estimate_model_button[i]));
 	reset_estimate = TRUE;
 	update_battery_panels();
 	}

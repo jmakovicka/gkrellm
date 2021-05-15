@@ -2565,7 +2565,7 @@ sysdep_option_cb(GtkWidget *button, SysdepOption *so)
 	{
 	if (!so)
 		return;
-	so->value = GTK_TOGGLE_BUTTON(button)->active;
+	so->value = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button));
 	}
 
 static void
@@ -2574,7 +2574,7 @@ cb_temperature_units(GtkWidget *button, gpointer data)
 	GList	*list;
 	gint	units;
 
-	units = GTK_TOGGLE_BUTTON(button)->active;
+	units = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button));
 	if (units == units_fahrenheit)
 		return;
 	units_fahrenheit = units;
@@ -2592,7 +2592,7 @@ cb_show_units(GtkWidget *button, gpointer data)
 	{
 	gint	show;
 
-	show = GTK_TOGGLE_BUTTON(button)->active;
+	show = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button));
 	if (show == show_units)
 		return;
 	show_units = show;
@@ -2608,7 +2608,7 @@ cb_voltages_display(GtkWidget *entry, gpointer data)
 	gint	i;
 
 	for (i = 0; i < N_DISPLAY_MODES; ++i)
-		if (GTK_TOGGLE_BUTTON(display_mode_button[i])->active)
+		if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(display_mode_button[i])))
 			display_mode = i;
 	gkrellm_sensors_rebuild(FALSE, FALSE, DO_VOLT);
 	}

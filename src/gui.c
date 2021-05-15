@@ -872,10 +872,10 @@ cb_HZ_spin(GtkWidget *widget, GtkSpinButton *spin)
 static void
 cb_hostname_sysname(GtkWidget *widget, gpointer data)
 	{
-	_GK.enable_hostname = GTK_TOGGLE_BUTTON(enable_hst_button)->active;
+	_GK.enable_hostname = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(enable_hst_button));
 	if (hostname_short_button)
-		_GK.hostname_short = GTK_TOGGLE_BUTTON(hostname_short_button)->active;
-	_GK.enable_system_name = GTK_TOGGLE_BUTTON(enable_sysname_button)->active;
+		_GK.hostname_short = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(hostname_short_button));
+	_GK.enable_system_name = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(enable_sysname_button));
 	gkrellm_apply_hostname_config();
 	}
 
@@ -889,15 +889,15 @@ cb_general(void)
 
 	if (allow_multiple_button)
 		_GK.allow_multiple_instances =
-					GTK_TOGGLE_BUTTON(allow_multiple_button)->active;
+					gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(allow_multiple_button));
 	if (on_top_button)
-		_GK.on_top = GTK_TOGGLE_BUTTON(on_top_button)->active;
+		_GK.on_top = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(on_top_button));
 
-	_GK.save_position = GTK_TOGGLE_BUTTON(save_position_button)->active;
+	_GK.save_position = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(save_position_button));
 #if !defined(WIN32)
 	if (sticky_state_button)
 		{
-		n = GTK_TOGGLE_BUTTON(sticky_state_button)->active;
+		n = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(sticky_state_button));
 		new_state = (n != _GK.sticky_state);
 		_GK.sticky_state = n;
 		if (new_state)
@@ -912,11 +912,11 @@ cb_general(void)
 		}
 
 	if (decorated_button)	/* restart for change to take effect */
-		_GK.decorated = GTK_TOGGLE_BUTTON(decorated_button)->active;
+		_GK.decorated = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(decorated_button));
 
 	if (skip_taskbar_button)
 		{
-		n = GTK_TOGGLE_BUTTON(skip_taskbar_button)->active;
+		n = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(skip_taskbar_button));
 		new_state = (n != _GK.state_skip_taskbar);
 		_GK.state_skip_taskbar = n;
 		if (new_state)
@@ -924,7 +924,7 @@ cb_general(void)
 		}
 	if (skip_pager_button)
 		{
-		n = GTK_TOGGLE_BUTTON(skip_pager_button)->active;
+		n = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(skip_pager_button));
 		new_state = (n != _GK.state_skip_pager);
 		_GK.state_skip_pager = n;
 		if (new_state)
@@ -932,7 +932,7 @@ cb_general(void)
 		}
 	if (above_button)
 		{
-		n = GTK_TOGGLE_BUTTON(above_button)->active;
+		n = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(above_button));
 		new_state = (n != _GK.state_above);
 		_GK.state_above = n;
 		if (new_state)
@@ -945,7 +945,7 @@ cb_general(void)
 		}
 	if (below_button)
 		{
-		n = GTK_TOGGLE_BUTTON(below_button)->active;
+		n = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(below_button));
 		new_state = (n != _GK.state_below);
 		_GK.state_below = n;
 		if (new_state)
@@ -965,7 +965,7 @@ cb_dock_type(GtkWidget *widget, gpointer data)
 	{
 	gboolean	sensitive;
 
-	_GK.dock_type = GTK_TOGGLE_BUTTON(dock_type_button)->active;
+	_GK.dock_type = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(dock_type_button));
 	sensitive = !_GK.dock_type;
 	if (!sensitive)
 		{

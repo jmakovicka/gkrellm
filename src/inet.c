@@ -1704,8 +1704,8 @@ cb_enter(GtkWidget *widget, gpointer data)
 
 	in = g_new0(InetMon, 1);
 
-	in->data0_is_range = GTK_TOGGLE_BUTTON(data0_range_button)->active;
-	in->data1_is_range = GTK_TOGGLE_BUTTON(data1_range_button)->active;
+	in->data0_is_range = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(data0_range_button));
+	in->data1_is_range = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(data1_range_button));
 
 	in->label0 = gkrellm_gtk_entry_get_text(&label0_entry);
 	if (*(in->label0))

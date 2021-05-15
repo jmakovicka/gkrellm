@@ -1130,7 +1130,7 @@ cb_mem_enable(GtkWidget *button, gpointer data)
     {
 	gboolean enabled;
 
-	enabled = GTK_TOGGLE_BUTTON(button)->active;
+	enabled = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button));
 	gkrellm_panel_enable_visibility(mem.panel, enabled, &mem.enabled);
 	spacer_visibility();
 	gtk_widget_set_sensitive(mem_alert_button, enabled);
@@ -1141,7 +1141,7 @@ cb_swap_enable(GtkWidget *button, gpointer data)
     {
 	gboolean enabled;
 
-	enabled = GTK_TOGGLE_BUTTON(button)->active;
+	enabled = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button));
 	gkrellm_panel_enable_visibility(swap.panel, enabled, &swap.enabled);
 	spacer_visibility();
 	gtk_widget_set_sensitive(swap_alert_button, enabled);
@@ -1152,7 +1152,7 @@ cb_swap_chart_enable(GtkWidget *button, gpointer data)
     {
 	gboolean enabled;
 
-	enabled = GTK_TOGGLE_BUTTON(button)->active;
+	enabled = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button));
 	if (enabled && !swap_chart.enabled)
 		create_chart(&swap_chart, TRUE);
 	else if (!enabled && swap_chart.enabled)
@@ -1177,7 +1177,7 @@ cb_all_krells(GtkWidget *button, gpointer data)
     {
 	gboolean enabled;
 
-	enabled = GTK_TOGGLE_BUTTON(button)->active;
+	enabled = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button));
 	if (enabled && !mem.all_krells)
 		{		/* krell list order needs to be: cache, buffer, used */
 		gkrellm_insert_krell(mem.panel, mem.krell_buffers, FALSE);

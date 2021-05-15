@@ -1707,7 +1707,7 @@ cb_combo_changed(GtkComboBox *widget, gpointer user_data)
 	if (m && (fstab_user_permission(m) || uid == 0))
 		{
 		gtk_widget_set_sensitive(mounting_button, TRUE);
-		if (GTK_TOGGLE_BUTTON(mounting_button)->active)
+		if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(mounting_button)))
 			{
 			gtk_entry_set_text(GTK_ENTRY(mount_entry), "");
 			gtk_entry_set_text(GTK_ENTRY(umount_entry), "");
@@ -1717,7 +1717,7 @@ cb_combo_changed(GtkComboBox *widget, gpointer user_data)
 		}
 	else
 		{
-		if (GTK_TOGGLE_BUTTON(mounting_button)->active)
+		if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(mounting_button)))
 			gtk_toggle_button_set_active(
 						GTK_TOGGLE_BUTTON(mounting_button), FALSE);
 		else
@@ -1734,7 +1734,7 @@ cb_mount_button_clicked(GtkWidget *widget)
 	{
 	if (!mounting_supported || _GK.client_mode)
 		return;
-	if (GTK_TOGGLE_BUTTON(mounting_button)->active)
+	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(mounting_button)))
 		{
 		gtk_entry_set_text(GTK_ENTRY(mount_entry), "");
 		gtk_entry_set_text(GTK_ENTRY(umount_entry), "");
@@ -1751,7 +1751,7 @@ cb_mount_button_clicked(GtkWidget *widget)
 		gtk_widget_set_sensitive(mount_entry, TRUE);
 		gtk_widget_set_sensitive(umount_entry, TRUE);
 		if (   ejectable_button
-			&& GTK_TOGGLE_BUTTON(ejectable_button)->active
+			&& gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ejectable_button))
 		   )
 			gtk_widget_set_sensitive(device_entry, TRUE);
 		}
@@ -1764,8 +1764,8 @@ cb_ejectable_button_clicked(GtkWidget *widget)
 
 	if (!mounting_supported || _GK.client_mode)
 		return;
-	fstab_mounting = GTK_TOGGLE_BUTTON(mounting_button)->active;
-	if (GTK_TOGGLE_BUTTON(ejectable_button)->active)
+	fstab_mounting = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(mounting_button));
+	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ejectable_button)))
 		{
 		gtk_widget_set_sensitive(device_entry, !fstab_mounting);
 		}
@@ -1781,7 +1781,7 @@ cb_secondary_button_clicked(GtkWidget *widget)
 	{
 	if (!mounting_supported)	/* Show button is in client mode */
 		return;
-	if (GTK_TOGGLE_BUTTON(secondary_button)->active)
+	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(secondary_button)))
 		gtk_widget_set_sensitive(show_button, TRUE);
 	else
 		{
@@ -2015,9 +2015,9 @@ add_cb(GtkWidget *widget)
 	fs->mount.directory = g_strdup(gkrellm_gtk_entry_get_text(&entry));
 
 	if (show_button)
-		fs->show_if_mounted = GTK_TOGGLE_BUTTON(show_button)->active;
+		fs->show_if_mounted = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(show_button));
 	if (mounting_button)
-		fs->fstab_mounting = GTK_TOGGLE_BUTTON(mounting_button)->active;
+		fs->fstab_mounting = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(mounting_button));
 	if (mount_entry)
 		{
 		gkrellm_dup_string(&(fs->launch_mount.command),
@@ -2027,7 +2027,7 @@ add_cb(GtkWidget *widget)
 		}
 	if (ejectable_button)
 		{
-		fs->ejectable = GTK_TOGGLE_BUTTON(ejectable_button)->active;
+		fs->ejectable = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ejectable_button));
 		if (fs->ejectable && !fs->fstab_mounting && device_entry)
 			gkrellm_dup_string(&(fs->eject_device),
 					gkrellm_gtk_entry_get_text(&device_entry));
@@ -2066,7 +2066,7 @@ add_cb(GtkWidget *widget)
 		}
 
 	model = gtk_tree_view_get_model(treeview);
-	secondary = GTK_TOGGLE_BUTTON(secondary_button)->active;
+	secondary = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(secondary_button));
 	if (row_reference)
 		{
 		path = gtk_tree_row_reference_get_path(row_reference);
@@ -2183,13 +2183,13 @@ cb_data_format(GtkWidget *widget, gpointer data)
 static void
 cb_auto_eject(GtkWidget *button, gpointer data)
 	{
-	cdrom_auto_eject = GTK_TOGGLE_BUTTON(button)->active;
+	cdrom_auto_eject = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button));
 	}
 
 static void
 cb_binary_units(GtkWidget *button, gpointer data)
 	{
-	binary_units = GTK_TOGGLE_BUTTON(button)->active;
+	binary_units = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button));
 	}
 
 static void

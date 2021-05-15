@@ -1183,9 +1183,9 @@ cb_alert_config(GkrellmAlert *ap, DiskMon *disk)
 	gboolean		valid;
 
 	disk->alert_uses_read =
-				GTK_TOGGLE_BUTTON(disk->alert_config_read_button)->active;
+				gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(disk->alert_config_read_button));
 	disk->alert_uses_write =
-				GTK_TOGGLE_BUTTON(disk->alert_config_write_button)->active;
+				gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(disk->alert_config_write_button));
 	if (!gkrellm_config_window_shown())
 		return;
 	model = gtk_tree_view_get_model(treeview);
@@ -1222,8 +1222,8 @@ cb_alert_config_button(GtkWidget *button, DiskMon *disk)
 	{
 	gboolean	read, write;
 
-	read = GTK_TOGGLE_BUTTON(disk->alert_config_read_button)->active;
-	write = GTK_TOGGLE_BUTTON(disk->alert_config_write_button)->active;
+	read = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(disk->alert_config_read_button));
+	write = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(disk->alert_config_write_button));
 	if (!read && !write)
 		{
 		gtk_toggle_button_set_active(

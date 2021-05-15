@@ -240,7 +240,7 @@ static GtkWidget	*launch_entry,
 static void
 cb_enable(GtkWidget *widget, gpointer data)
 	{
-	uptime_enabled = GTK_TOGGLE_BUTTON(uptime_enabled_button)->active;
+	uptime_enabled = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(uptime_enabled_button));
 	if (uptime_enabled)
 		{
 		gkrellm_panel_show(uptime);

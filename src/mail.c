@@ -3394,7 +3394,7 @@ default_port_entry(void)
 	gboolean	active;
 	gchar*		default_port = NULL;
 
-	active = GTK_TOGGLE_BUTTON(port_button)->active;
+	active = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(port_button));
 	if (!active)
 		{
 		default_port = default_port_of_proto(
@@ -3578,7 +3578,7 @@ mailbox_enter_cb(void)
 
 	new_account = g_new0(MailAccount, 1);
 	valid = FALSE;
-	remote = remote_button ? GTK_TOGGLE_BUTTON(remote_button)->active : TRUE;
+	remote = remote_button ? gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(remote_button)) : TRUE;
 	if (remote)
 		{
 		if (   dup_entry(&new_account->server, &server_entry)
@@ -3586,7 +3586,7 @@ mailbox_enter_cb(void)
 			&& dup_entry(&new_account->password, &password_entry)
 		   )
 			valid = TRUE;
-		if (GTK_TOGGLE_BUTTON(port_button)->active)
+		if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(port_button)))
 			new_account->port = atoi(gkrellm_gtk_entry_get_text(&port_entry));
 		new_account->mboxtype = MBOX_REMOTE;
 		new_account->protocol = menu_to_proto(optmenu_auth_protocol);
@@ -3669,7 +3669,7 @@ cb_animation_mode(GtkWidget *button, gpointer data)
 	{
 	gint	i = GPOINTER_TO_INT(data);
 
-	if (GTK_TOGGLE_BUTTON(button)->active)
+	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button)))
 		animation_mode = i;
 	}
 
@@ -3678,7 +3678,7 @@ cb_count_mode(GtkWidget *button, gpointer data)
 	{
 	gint	i = GPOINTER_TO_INT(data);
 
-	if (GTK_TOGGLE_BUTTON(button)->active)
+	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button)))
 		count_mode = i;
 	mail_text_decal->value = -1;		/* Force a redraw */
 	force_mail_check = TRUE;
@@ -3696,33 +3696,33 @@ multi_toggle_button_cb(GtkWidget *button, gpointer data)
 	{
 	gint	i;
 
-	cont_animation_mode = GTK_TOGGLE_BUTTON(enable_cont_anim_button)->active;
+	cont_animation_mode = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(enable_cont_anim_button));
 	if (check_only_button)
-		fetch_check_only_mode = GTK_TOGGLE_BUTTON(check_only_button)->active;
-	reset_remote_mode = GTK_TOGGLE_BUTTON(reset_remote_button)->active;
+		fetch_check_only_mode = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_only_button));
+	reset_remote_mode = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(reset_remote_button));
 
-	i = GTK_TOGGLE_BUTTON(unseen_is_new_button)->active;
+	i = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(unseen_is_new_button));
 	if (unseen_is_new != i)
 		force_mail_check = TRUE;
 	unseen_is_new = i;
 
-	super_mute_mode = GTK_TOGGLE_BUTTON(super_mute_button)->active;
+	super_mute_mode = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(super_mute_button));
 
 	mail_text_decal->value = -1;		/* Force a redraw */
-	mua_inhibit_mode = GTK_TOGGLE_BUTTON(mua_inhibit_button)->active;
+	mua_inhibit_mode = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(mua_inhibit_button));
 
-	enable_multimua = GTK_TOGGLE_BUTTON(enable_multimua_button)->active;
-	show_tooltip = GTK_TOGGLE_BUTTON(show_tooltip_button)->active;
+	enable_multimua = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(enable_multimua_button));
+	show_tooltip = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(show_tooltip_button));
 
 	if (mh_seq_ignore_button)
-		mh_seq_ignore = GTK_TOGGLE_BUTTON(mh_seq_ignore_button)->active;
+		mh_seq_ignore = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(mh_seq_ignore_button));
 	update_tooltip();
 	}
 
 static void
 cb_enable(GtkWidget *button, gpointer data)
 	{
-	enable_mail = GTK_TOGGLE_BUTTON(button)->active;
+	enable_mail = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button));
 	if (enable_mail)
 		{
 		gkrellm_panel_show(mail);

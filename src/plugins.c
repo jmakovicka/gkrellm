@@ -1369,7 +1369,7 @@ apply_place(void)
 	if (!place_plugin || setting_place_buttons)
 		return;
 	for (i = 0; i < N_BUILTIN_MONITORS; ++i)
-		if (GTK_TOGGLE_BUTTON(builtin_button[i])->active)
+		if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(builtin_button[i])))
 			break;
 	for (list = gkrellm_monitor_list; list; list = list->next)
 		{
@@ -1378,7 +1378,7 @@ apply_place(void)
 			continue;
 		place_plugin->privat->insert_before_id = mon->id;
 		place_plugin->privat->insert_after =
-				GTK_TOGGLE_BUTTON(after_button)->active;
+				gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(after_button));
 		if (place_plugin->privat->insert_after)
 			place_plugin->privat->gravity = 0;
 		else

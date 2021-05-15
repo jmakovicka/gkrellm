@@ -2366,7 +2366,7 @@ static void
 cb_line_draw_style(GtkWidget *widget, GkrellmChartdata *cd)
 	{
 	_GK.config_modified = TRUE;
-	cd->draw_style = GTK_TOGGLE_BUTTON(widget)->active;
+	cd->draw_style = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 	gkrellm_rescale_chart(cd->chart);
 	}
 
@@ -2377,7 +2377,7 @@ cb_auto_resolution(GtkWidget *widget, GkrellmChart *cp)
 	GkrellmChartconfig	*cf = cp->config;
 
 	_GK.config_modified = TRUE;
-	cf->auto_grid_resolution = GTK_TOGGLE_BUTTON(widget)->active;
+	cf->auto_grid_resolution = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 	set_resolution_menubar_items_sensitivity(cf);
 	button = cf->grid_resolution_spin_button;
@@ -2392,7 +2392,7 @@ static void
 cb_inverted_draw_mode(GtkWidget *widget, GkrellmChartdata *cd)
 	{
 	_GK.config_modified = TRUE;
-	cd->inverted = GTK_TOGGLE_BUTTON(widget)->active;
+	cd->inverted = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 	gkrellm_rescale_chart(cd->chart);
 	}
 
@@ -2400,7 +2400,7 @@ static void
 cb_hide(GtkWidget *widget, GkrellmChartdata *cd)
 	{
 	_GK.config_modified = TRUE;
-	cd->hide = GTK_TOGGLE_BUTTON(widget)->active;
+	cd->hide = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 	set_chartdata_split_heights(cd->chart);
 	gkrellm_rescale_chart(cd->chart);
 	}
@@ -2409,7 +2409,7 @@ static void
 cb_split_mode(GtkWidget *widget, GkrellmChartdata *cd)
 	{
 	_GK.config_modified = TRUE;
-	cd->split_chart = GTK_TOGGLE_BUTTON(widget)->active;
+	cd->split_chart = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 	gtk_widget_set_sensitive(cd->split_fraction_spin_button, cd->split_chart);
 	set_chartdata_split_heights(cd->chart);
 	gkrellm_rescale_chart(cd->chart);

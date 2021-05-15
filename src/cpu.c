@@ -1128,7 +1128,7 @@ static void
 cb_alert_config(GkrellmAlert *ap, gpointer data)
 	{
 #if !defined(WIN32)
-	alert_includes_nice = GTK_TOGGLE_BUTTON(alert_config_nice_button)->active;
+	alert_includes_nice = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(alert_config_nice_button));
 #endif
 	dup_cpu_alert();
 	}
@@ -1194,7 +1194,7 @@ cb_sensor_separate(GtkWidget *button, gpointer data)
     {
 	GList	*list;
 
-	sensor_separate_mode = GTK_TOGGLE_BUTTON(button)->active;
+	sensor_separate_mode = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button));
 	for (list = cpu_mon_list; list; list = list->next)
 		fix_panel((CpuMon *) list->data);
 	}
@@ -1208,7 +1208,7 @@ cb_show_panel_labels(GtkWidget *button, gpointer data)
 	GList			*list;
 	gboolean		rebuild_temps = FALSE, rebuild_fans = FALSE;
 
-	show_panel_labels = GTK_TOGGLE_BUTTON(button)->active;
+	show_panel_labels = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button));
 	style = gkrellm_panel_style(style_id);
 
 	for (list = cpu_mon_list; list; list = list->next)
@@ -1251,7 +1251,7 @@ cb_show_panel_labels(GtkWidget *button, gpointer data)
 static void
 cb_omit_nice(GtkWidget *button, gpointer data)
     {
-	omit_nice_mode = GTK_TOGGLE_BUTTON(button)->active;
+	omit_nice_mode = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button));
 	}
 
 static void
@@ -1282,7 +1282,7 @@ cb_enable(GtkWidget *button, gpointer data)
 	gint		i;
 	gboolean	enabled, rebuild_temps = FALSE, rebuild_fans = FALSE;
 
-	enabled = GTK_TOGGLE_BUTTON(button)->active;
+	enabled = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button));
 	any_cpu_enabled = any_real_cpu_enabled = FALSE;
 	for (i = 0, list = cpu_mon_list; list; ++i, list = list->next)
 		{
@@ -1326,7 +1326,7 @@ cb_enable(GtkWidget *button, gpointer data)
 static void
 cb_config_tracking(GtkWidget *button, gpointer data)
 	{
-	config_tracking = GTK_TOGGLE_BUTTON(button)->active;
+	config_tracking = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button));
 	}
 
 static void
