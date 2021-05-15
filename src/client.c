@@ -96,7 +96,7 @@ static gint		server_major_version,
 				server_minor_version,
 				server_rev_version;
 
-static gint		client_input_id,
+static guint		client_input_id,
 				client_fd;
 static gboolean	server_alive;
 
@@ -1789,7 +1789,7 @@ gkrellm_client_mode_disconnect(void)
 	{
 	if (client_input_id != 0)
 		{
-		gdk_input_remove(client_input_id);
+		g_source_remove(client_input_id);
 		client_input_id = 0;
 		}
 	if (client_fd >= 0)
@@ -1803,13 +1803,13 @@ gkrellm_client_mode_disconnect(void)
 	}
 
 static void
-read_server_input(gpointer data, gint fd, GdkInputCondition condition)
+read_server_input(GIOChannel *source, GIOCondition condition, gpointer data)
 	{
 	gchar	*line, *eol;
 	gint	count, n, table_size;
 
 	n = sizeof(server_buf) - buf_index - 1;
-	count = recv(fd, server_buf + buf_index, n, 0);
+	count = recv(g_io_channel_unix_get_fd(source), server_buf + buf_index, n, 0);
 	if (count <= 0)
 		{
 		gkrellm_debug(DEBUG_CLIENT, "read_server_input(); recv() " \
@@ -1956,9 +1956,12 @@ gkrellm_client_mode_connect(void)
 	*/
 #ifndef WIN32
 	fcntl(client_fd, F_SETFL, O_NONBLOCK);
+	client_input_id = g_io_add_watch(g_io_channel_unix_new(client_fd), G_IO_IN,
+						(GIOFunc) read_server_input, NULL);
+#else
+	client_input_id = g_io_add_watch(g_io_channel_win32_new_fd(client_fd), G_IO_IN,
+						(GIOFunc) read_server_input, NULL);
 #endif
-	client_input_id = gdk_input_add(client_fd, GDK_INPUT_READ,
-					(GdkInputFunction) read_server_input, NULL);
 
 	server_alive = TRUE;
 
