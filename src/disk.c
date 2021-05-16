@@ -1452,7 +1452,6 @@ create_disk_tab(GtkWidget *tab_vbox)
 	disk_model = model;
 
 	treeview = GTK_TREE_VIEW(gtk_tree_view_new_with_model(model));
-	gtk_tree_view_set_rules_hint(treeview, TRUE);
 
 	renderer = gtk_cell_renderer_toggle_new();
 	gtk_tree_view_insert_column_with_attributes(treeview, -1, _("Enable"),

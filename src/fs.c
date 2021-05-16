@@ -2395,7 +2395,6 @@ create_fs_panels_page(GtkWidget *vbox)
 
 	treeview = GTK_TREE_VIEW(gtk_tree_view_new_with_model(model));
 	g_object_unref(G_OBJECT(model));
-	gtk_tree_view_set_rules_hint(treeview, TRUE);
 	gtk_tree_view_set_reorderable(treeview, TRUE);
 	g_signal_connect(G_OBJECT(treeview), "drag_begin",
 				G_CALLBACK(cb_drag_begin), NULL);

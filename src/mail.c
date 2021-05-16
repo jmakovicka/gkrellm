@@ -4184,7 +4184,6 @@ create_mail_tab(GtkWidget *tab_vbox)
 	model = create_model();
 	treeview = GTK_TREE_VIEW(gtk_tree_view_new_with_model(model));
 	g_object_unref(G_OBJECT(model));
-	gtk_tree_view_set_rules_hint(treeview, TRUE);
 	renderer = gtk_cell_renderer_text_new();
 	gtk_tree_view_insert_column_with_attributes(treeview, -1, _("Protocol"),
 				renderer,

@@ -726,7 +726,6 @@ net_stats_page(GtkWidget *vbox, NetMon *net,
 	model = stats_model_create(net, ns, n_stats);
 	treeview = GTK_TREE_VIEW(gtk_tree_view_new_with_model(model));
 	g_object_unref(model);
-	gtk_tree_view_set_rules_hint(treeview, TRUE);
 
 	renderer = gtk_cell_renderer_text_new();
 	gtk_tree_view_insert_column_with_attributes(treeview, -1, period,

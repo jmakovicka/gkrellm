@@ -1885,7 +1885,6 @@ create_theme_tab(GtkWidget *tabs_vbox)
 	model = theme_create_model();
 	theme_treeview = GTK_TREE_VIEW(gtk_tree_view_new_with_model(model));
 	g_object_unref(G_OBJECT(model));
-	gtk_tree_view_set_rules_hint(theme_treeview, TRUE);
 	renderer = gtk_cell_renderer_text_new();
 	gtk_tree_view_insert_column_with_attributes(theme_treeview, -1,
 				_("Theme"), renderer,
