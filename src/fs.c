@@ -2375,7 +2375,7 @@ create_fs_panels_page(GtkWidget *vbox)
 
 	gkrellm_gtk_button_connected(vbox1, &new_apply_button, FALSE, FALSE, 4,
 			add_cb, NULL, _("New"));
-	GTK_WIDGET_SET_FLAGS(new_apply_button, GTK_CAN_DEFAULT);
+	gtk_widget_set_can_default(new_apply_button, TRUE);
 	gtk_widget_grab_default(new_apply_button);
 
 	gkrellm_gtk_button_connected(vbox1, &delete_button, FALSE, FALSE, 4,

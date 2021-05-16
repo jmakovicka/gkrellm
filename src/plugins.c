@@ -1586,7 +1586,7 @@ cb_place_button(GtkWidget *widget, gpointer data)
 		gtk_box_pack_end(GTK_BOX(vbox1), hbox, FALSE, FALSE, 0);
 
 		button = gtk_button_new_with_label(_("OK"));
-		GTK_WIDGET_SET_FLAGS(button, GTK_CAN_DEFAULT);
+		gtk_widget_set_can_default(button, TRUE);
 		g_signal_connect(G_OBJECT(button), "clicked",
 				G_CALLBACK(cb_close_place), NULL);
 		gtk_box_pack_start(GTK_BOX(hbox), button, TRUE, TRUE, 0);
