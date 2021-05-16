@@ -2720,7 +2720,7 @@ create_sensors_tab(GtkWidget *tab_vbox)
 	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(tabs), GTK_POS_TOP);
 	gtk_box_pack_start(GTK_BOX(tab_vbox), tabs, TRUE, TRUE, 0);
 
-	g_signal_connect(GTK_OBJECT(tabs), "destroy",
+	g_signal_connect(G_OBJECT(tabs), "destroy",
 				G_CALLBACK(sensors_tab_destroy), NULL);
 
 /* --Setup tab */

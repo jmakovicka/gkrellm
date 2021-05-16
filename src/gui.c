@@ -57,8 +57,8 @@ gkrellm_message_dialog(gchar *title, gchar *message)
 				GTK_DIALOG_DESTROY_WITH_PARENT,
 				GTK_STOCK_OK, GTK_RESPONSE_NONE,
 				NULL);
-	g_signal_connect_swapped(GTK_OBJECT(dialog), "response",
-				G_CALLBACK(gtk_widget_destroy), GTK_OBJECT(dialog));
+	g_signal_connect_swapped(G_OBJECT(dialog), "response",
+				G_CALLBACK(gtk_widget_destroy), G_OBJECT(dialog));
 	gtk_window_set_wmclass(GTK_WINDOW(dialog),
 				"Gkrellm_dialog", "Gkrellm");
 
