@@ -55,7 +55,7 @@ gkrellm_message_dialog(gchar *title, gchar *message)
 	dialog = gtk_dialog_new_with_buttons(title ? title : "GKrellM",
 				GTK_WINDOW(top_win),
 				GTK_DIALOG_DESTROY_WITH_PARENT,
-				GTK_STOCK_OK, GTK_RESPONSE_NONE,
+				_("OK"), GTK_RESPONSE_NONE,
 				NULL);
 	g_signal_connect_swapped(G_OBJECT(dialog), "response",
 				G_CALLBACK(gtk_widget_destroy), G_OBJECT(dialog));
@@ -98,7 +98,7 @@ gkrellm_config_message_dialog(gchar *title, gchar *message)
 	dialog = gtk_dialog_new_with_buttons(title ? title : "GKrellM",
 				GTK_WINDOW(config_window),
 				GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-				GTK_STOCK_OK, GTK_RESPONSE_OK,
+				_("OK"), GTK_RESPONSE_OK,
 				NULL);
 	gtk_window_set_wmclass(GTK_WINDOW(dialog),
 				"Gkrellm_dialog", "Gkrellm");
@@ -523,10 +523,7 @@ gkrellm_gtk_button_connected(GtkWidget *box, GtkWidget **button,
 
 	if (!string)
 		return;
-	if (!strncmp(string, "gtk-", 4))
-		b = gtk_button_new_from_stock(string);
-	else
-		b = gtk_button_new_with_label(string);
+	b = gtk_button_new_with_label(string);
 	if (box)
 		{
 		if (pad < 0)
@@ -2408,19 +2405,19 @@ create_config_window(void)
 	gtk_box_set_spacing(GTK_BOX(hbox), 5);
 	gtk_box_pack_start(GTK_BOX(main_vbox), hbox, FALSE, FALSE, 0);
 
-	apply_button = gtk_button_new_from_stock(GTK_STOCK_APPLY);
+	apply_button = gtk_button_new_with_label(_("Apply"));
 	GTK_WIDGET_SET_FLAGS(apply_button, GTK_CAN_DEFAULT);
 	g_signal_connect(G_OBJECT(apply_button), "clicked",
 				G_CALLBACK(apply_config), NULL);
 	gtk_box_pack_start(GTK_BOX(hbox), apply_button, TRUE, TRUE, 0);
 
-	close_button = gtk_button_new_from_stock(GTK_STOCK_CLOSE);
+	close_button = gtk_button_new_with_label(_("Close"));
 	GTK_WIDGET_SET_FLAGS(close_button, GTK_CAN_DEFAULT);
 	g_signal_connect(G_OBJECT(close_button), "clicked",
 				G_CALLBACK(close_config), GINT_TO_POINTER(1));
 	gtk_box_pack_start(GTK_BOX(hbox), close_button, TRUE, TRUE, 0);
 
-	button = gtk_button_new_from_stock(GTK_STOCK_OK);
+	button = gtk_button_new_with_label(_("OK"));
 	GTK_WIDGET_SET_FLAGS(button, GTK_CAN_DEFAULT);
 	g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(OK_config), NULL);
 	gtk_box_pack_start(GTK_BOX(hbox), button, TRUE, TRUE, 0);

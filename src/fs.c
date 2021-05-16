@@ -1852,7 +1852,7 @@ cb_tree_selection_changed(GtkTreeSelection *selection, gpointer data)
 	if (!gtk_tree_selection_get_selected(selection, &model, &iter))
 		{
 		reset_entries(FALSE);
-		gtk_button_set_label(GTK_BUTTON(new_apply_button), GTK_STOCK_NEW);
+		gtk_button_set_label(GTK_BUTTON(new_apply_button), _("New"));
 		gtk_widget_set_sensitive(delete_button, FALSE);
 		gtk_widget_set_sensitive(alert_button, FALSE);
 		return;
@@ -1870,12 +1870,12 @@ cb_tree_selection_changed(GtkTreeSelection *selection, gpointer data)
 	if (depth == 1)
 		{
 		reset_entries(secondary);
-		gtk_button_set_label(GTK_BUTTON(new_apply_button), GTK_STOCK_NEW);
+		gtk_button_set_label(GTK_BUTTON(new_apply_button), _("New"));
 		gtk_widget_set_sensitive(delete_button, FALSE);
 		gtk_widget_set_sensitive(alert_button, FALSE);
 		return;
 		}
-	gtk_button_set_label(GTK_BUTTON(new_apply_button), GTK_STOCK_APPLY);
+	gtk_button_set_label(GTK_BUTTON(new_apply_button), _("New"));
 	gtk_widget_set_sensitive(delete_button, TRUE);
 	gtk_widget_set_sensitive(alert_button, TRUE);
 
@@ -2374,12 +2374,12 @@ create_fs_panels_page(GtkWidget *vbox)
 	gtk_box_pack_end(GTK_BOX(hbox), vbox1, FALSE, FALSE, 5);
 
 	gkrellm_gtk_button_connected(vbox1, &new_apply_button, FALSE, FALSE, 4,
-			add_cb, NULL, GTK_STOCK_NEW);
+			add_cb, NULL, _("New"));
 	GTK_WIDGET_SET_FLAGS(new_apply_button, GTK_CAN_DEFAULT);
 	gtk_widget_grab_default(new_apply_button);
 
 	gkrellm_gtk_button_connected(vbox1, &delete_button, FALSE, FALSE, 4,
-			cb_delete, NULL, GTK_STOCK_DELETE);
+			cb_delete, NULL, _("Delete"));
 	gtk_widget_set_sensitive(delete_button, FALSE);
 
 	gkrellm_gtk_alert_button(vbox1, &alert_button, FALSE, FALSE, 4, FALSE,

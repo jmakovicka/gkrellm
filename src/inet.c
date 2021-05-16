@@ -1927,18 +1927,18 @@ create_inet_tab(GtkWidget *tab_vbox)
 	gtk_box_set_spacing(GTK_BOX(hbox), 5);
 	gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, FALSE, 0);
 
-	button = gtk_button_new_from_stock(GTK_STOCK_DELETE);
+	button = gtk_button_new_with_label(_("Delete"));
 	g_signal_connect(G_OBJECT(button), "clicked",
 			G_CALLBACK(cb_delete), NULL);
 	gtk_box_pack_start(GTK_BOX(hbox), button, TRUE, TRUE, 0);
 
 	/* everybody knows about CNTL click, right? */
-//	button = gtk_button_new_from_stock(GTK_STOCK_NEW);
+//	button = gtk_button_new_with_label(_("New"));
 //	g_signal_connect(G_OBJECT(button), "clicked",
 //			G_CALLBACK(reset_entries), NULL);
 //	gtk_box_pack_start(GTK_BOX(hbox), button, TRUE, TRUE, 0);
 
-	button = gtk_button_new_from_stock(GTK_STOCK_ADD);
+	button = gtk_button_new_with_label(_("Add"));
 	g_signal_connect(G_OBJECT(button), "clicked",
 			G_CALLBACK(cb_enter), NULL);
 	gtk_box_pack_start(GTK_BOX(hbox), button, TRUE, TRUE, 0);

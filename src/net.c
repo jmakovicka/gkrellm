@@ -802,7 +802,7 @@ net_stats_window_show(NetMon *net)
 	hbox = gtk_hbutton_box_new();
 	gtk_button_box_set_layout(GTK_BUTTON_BOX(hbox), GTK_BUTTONBOX_END);
 	gtk_box_pack_start(GTK_BOX(main_vbox), hbox, FALSE, FALSE, 4);
-	button = gtk_button_new_from_stock(GTK_STOCK_CLOSE);
+	button = gtk_button_new_with_label(_("Close"));
 	g_signal_connect(G_OBJECT(button), "clicked",
 			G_CALLBACK(net_stats_close_cb), stats_window);
 	gtk_box_pack_start(GTK_BOX(hbox), button, TRUE, TRUE, 0);

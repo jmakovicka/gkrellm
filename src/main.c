@@ -1830,7 +1830,7 @@ usage()
 	GtkWidget *dialog, *content_area, *scrolled, *text_view;
 
 	dialog = gtk_dialog_new_with_buttons(_("GKrellM"), NULL, GTK_DIALOG_MODAL,
-		GTK_STOCK_OK, GTK_RESPONSE_OK, NULL);
+		_("OK"), GTK_RESPONSE_OK, NULL);
 	content_area = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
 
 	scrolled = gtk_scrolled_window_new(NULL, NULL);

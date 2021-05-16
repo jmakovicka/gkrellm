@@ -1585,7 +1585,7 @@ cb_place_button(GtkWidget *widget, gpointer data)
 		gtk_box_set_spacing(GTK_BOX(hbox), 5);
 		gtk_box_pack_end(GTK_BOX(vbox1), hbox, FALSE, FALSE, 0);
 
-		button = gtk_button_new_from_stock(GTK_STOCK_OK);
+		button = gtk_button_new_with_label(_("OK"));
 		GTK_WIDGET_SET_FLAGS(button, GTK_CAN_DEFAULT);
 		g_signal_connect(G_OBJECT(button), "clicked",
 				G_CALLBACK(cb_close_place), NULL);

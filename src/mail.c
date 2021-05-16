@@ -3453,7 +3453,7 @@ cb_tree_selection_changed(GtkTreeSelection *selection, gpointer data)
 	if (!gtk_tree_selection_get_selected(selection, &model, &iter))
 		{
 		reset_entries();
-		gtk_button_set_label(GTK_BUTTON(new_apply_button), GTK_STOCK_NEW);
+		gtk_button_set_label(GTK_BUTTON(new_apply_button), _("New"));
 		gtk_widget_set_sensitive(delete_button, FALSE);
 		return;
 		}
@@ -3461,7 +3461,7 @@ cb_tree_selection_changed(GtkTreeSelection *selection, gpointer data)
 	change_row_reference(model, path);
 	gtk_tree_path_free(path);
 
-	gtk_button_set_label(GTK_BUTTON(new_apply_button), GTK_STOCK_APPLY);
+	gtk_button_set_label(GTK_BUTTON(new_apply_button), _("Apply"));
 	gtk_widget_set_sensitive(delete_button, TRUE);
 
 	gtk_tree_model_get(model, &iter, ACCOUNT_COLUMN, &account, -1);
@@ -4169,11 +4169,11 @@ create_mail_tab(GtkWidget *tab_vbox)
 		default_port_entry();
 
 	gkrellm_gtk_button_connected(hbox, &delete_button, FALSE, FALSE, 5,
-			mailbox_delete_cb, NULL, GTK_STOCK_DELETE);
+			mailbox_delete_cb, NULL, _("Delete"));
 	gtk_widget_set_sensitive(delete_button, FALSE);
 
 	gkrellm_gtk_button_connected(hbox, &new_apply_button, FALSE, FALSE, 5,
-			mailbox_enter_cb, NULL, GTK_STOCK_NEW);
+			mailbox_enter_cb, NULL, _("New"));
 
 	vbox1 = gkrellm_gtk_framed_vbox(vbox, NULL, 6, TRUE, 0, 3);
 	scrolled = gtk_scrolled_window_new(NULL, NULL);

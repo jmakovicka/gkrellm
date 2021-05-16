@@ -2687,7 +2687,7 @@ gkrellm_chartconfig_window_create(GkrellmChart *cp)
 	gtk_box_set_spacing(GTK_BOX(hbox), 5);
 	gtk_box_pack_start(GTK_BOX(main_vbox), hbox, FALSE, FALSE, 0);
 
-	button = gtk_button_new_from_stock(GTK_STOCK_OK);
+	button = gtk_button_new_with_label(_("OK"));
 	GTK_WIDGET_SET_FLAGS(button, GTK_CAN_DEFAULT);
 	g_signal_connect(G_OBJECT(button), "clicked",
 			G_CALLBACK(chart_config_window_close), cp);
