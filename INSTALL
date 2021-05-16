@@ -92,7 +92,7 @@ See:
 Needed software for building gkrellm on win32 systems:
   - MinGW
   - MSYS (gkrellm makefiles are NOT compatible with cmd.exe)
-  - GTK >= 2.4 Development files (see http://www.gtk.org/download-windows.html)
+  - GTK >= 2.24 Development files (see http://www.gtk.org/download-windows.html)
   - OpenSSL or GnuTLS (optional)
   - libntlm (optional)
 

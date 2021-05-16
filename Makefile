@@ -135,7 +135,7 @@ gkrellm.pc: Makefile
 	echo 'Name: GKrellM' >> gkrellm.pc
 	echo 'Description: Extensible GTK system monitoring application' >> gkrellm.pc
 	echo 'Version: $(VERSION)' >> gkrellm.pc
-	echo 'Requires: gtk+-2.0 >= 2.4.0' >> gkrellm.pc
+	echo 'Requires: gtk+-2.0 >= 2.24.0' >> gkrellm.pc
 	echo 'Cflags: -I$(INCLUDEDIR)' >> gkrellm.pc
 	echo '$(GKRELLM_PC_EXTRA)' >> gkrellm.pc
 
