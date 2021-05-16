@@ -1857,10 +1857,10 @@ gkrellm_chart_create(GtkWidget *vbox, GkrellmMonitor *mon, GkrellmChart *cp,
 
 	if (!cp->box)
 		{		
-		cp->box = gtk_vbox_new(FALSE, 0);	/* not a hbox anymore !! */
+		cp->box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);	/* not a hbox anymore !! */
 		gtk_box_pack_start(GTK_BOX(vbox), cp->box, FALSE, FALSE, 0);
 
-		cp->top_spacer.vbox = gtk_vbox_new(FALSE, 0);
+		cp->top_spacer.vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 		gtk_box_pack_start(GTK_BOX(cp->box), cp->top_spacer.vbox,
 				FALSE, FALSE, 0);
 		cp->drawing_area = gtk_drawing_area_new();
@@ -1870,7 +1870,7 @@ gkrellm_chart_create(GtkWidget *vbox, GkrellmMonitor *mon, GkrellmChart *cp,
 				| GDK_POINTER_MOTION_MASK);
 		gtk_box_pack_start(GTK_BOX(cp->box), cp->drawing_area,
 				FALSE, FALSE, 0);
-		cp->bottom_spacer.vbox = gtk_vbox_new(FALSE, 0);
+		cp->bottom_spacer.vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 		gtk_box_pack_start(GTK_BOX(cp->box), cp->bottom_spacer.vbox,
 				FALSE, FALSE, 0);
 
@@ -2574,7 +2574,7 @@ gkrellm_chartconfig_window_create(GkrellmChart *cp)
 	gtk_window_set_wmclass(GTK_WINDOW(cp->config_window),
 				"Gkrellm_conf", "Gkrellm");
 
-	main_vbox = gtk_vbox_new(FALSE, 0);
+	main_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 	gtk_container_set_border_width(GTK_CONTAINER(cp->config_window), 4);
 	gtk_container_add(GTK_CONTAINER(cp->config_window), main_vbox);
 	vbox = gkrellm_gtk_framed_vbox(main_vbox, s, 4, FALSE, 4, 3);

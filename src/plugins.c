@@ -813,10 +813,10 @@ gkrellm_place_plugin(GList **monitor_list, GkrellmMonitor *plugin)
 
 	if (plugin->create_monitor && !plugin->privat->main_vbox)
 		{
-		plugin->privat->main_vbox = gtk_vbox_new(FALSE, 0);
-		plugin->privat->top_spacer.vbox = gtk_vbox_new(FALSE, 0);
-		plugin->privat->vbox = gtk_vbox_new(FALSE, 0);
-		plugin->privat->bottom_spacer.vbox = gtk_vbox_new(FALSE, 0);
+		plugin->privat->main_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+		plugin->privat->top_spacer.vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+		plugin->privat->vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+		plugin->privat->bottom_spacer.vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 		}
 	for (plist = NULL, list = *monitor_list; list; list = list->next)
 		{
@@ -1516,11 +1516,11 @@ cb_place_button(GtkWidget *widget, gpointer data)
 		gtk_window_set_wmclass(GTK_WINDOW(place_plugin_window),
 				"Gkrellm_conf", "Gkrellm");
 
-		main_vbox = gtk_vbox_new(FALSE, 0);
+		main_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 		gtk_container_add(GTK_CONTAINER(place_plugin_window), main_vbox);
 		place_plugin_vbox = main_vbox;
 		vbox = gkrellm_gtk_framed_vbox(main_vbox, NULL, 3, FALSE, 4, 3);
-		hbox = gtk_hbox_new(FALSE, 0);
+		hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 		gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, FALSE, 0);
 
 		vbox1 = gkrellm_gtk_framed_vbox(hbox, _("Builtin Monitors"),
@@ -1548,7 +1548,7 @@ cb_place_button(GtkWidget *widget, gpointer data)
 				group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(button));
 				}
 			}
-		vbox1 = gtk_vbox_new(FALSE, 0);
+		vbox1 = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 		gtk_box_pack_start(GTK_BOX(hbox), vbox1, FALSE, FALSE, 0);
 		place_label = gtk_label_new("");
 		gtk_box_pack_start(GTK_BOX(vbox1), place_label, FALSE, FALSE, 10);
@@ -1575,7 +1575,7 @@ cb_place_button(GtkWidget *widget, gpointer data)
 				G_CALLBACK(cb_place), NULL);
 		gtk_box_pack_start(GTK_BOX(vbox3), after_button, FALSE, FALSE, 0);
 
-		hbox = gtk_hbox_new(FALSE, 0);
+		hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 		gtk_box_pack_start(GTK_BOX(vbox1), hbox, FALSE, FALSE, 0);
 		gkrellm_gtk_button_connected(hbox, NULL, TRUE, FALSE, 0,
 				cb_place_default, NULL, _("Plugin Defaults"));

@@ -1183,10 +1183,10 @@ create_battery_tab(GtkWidget *tab_vbox)
 				cb_enable, GINT_TO_POINTER(0),
 				_("Enable Battery"));
 
-	vbox2 = gtk_vbox_new(FALSE, 0);
+	vbox2 = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 	gtk_box_pack_start(GTK_BOX(vbox), vbox2, FALSE, FALSE, 0);
 
-	vbox1 = gtk_vbox_new(FALSE, 0);
+	vbox1 = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 	gkrellm_gtk_check_button_connected(vbox2, NULL, 
 			enable_estimate, FALSE, FALSE, 2,
 			cb_enable_estimate, vbox1, 
@@ -1211,7 +1211,7 @@ create_battery_tab(GtkWidget *tab_vbox)
 
 	if (!_GK.client_mode)
 		{
-		hbox2 = gtk_hbox_new(FALSE, 0);
+		hbox2 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 		gkrellm_gtk_spin_button(hbox2, NULL,
 				(gfloat) poll_interval, 1, 3600, 1, 10, 0, 55,
 				cb_poll_interval, NULL, FALSE,
@@ -1232,7 +1232,7 @@ create_battery_tab(GtkWidget *tab_vbox)
 	g_signal_connect(G_OBJECT(tooltip_entry), "changed",
 			G_CALLBACK(cb_launch_entry), NULL);
 
-	hbox = gtk_hbox_new(FALSE, 0);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_box_pack_end(GTK_BOX(vbox), hbox, FALSE, FALSE, 8);
 	gkrellm_gtk_alert_button(hbox, NULL, FALSE, FALSE, 4, TRUE,
 				cb_set_alert, NULL);

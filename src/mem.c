@@ -960,7 +960,7 @@ create_mem(GtkWidget *vbox, gint first_create)
 	{
 	if (first_create)
 		{
-		swap_chart.vbox = gtk_vbox_new(FALSE, 0);
+		swap_chart.vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 		gtk_box_pack_start(GTK_BOX(vbox), swap_chart.vbox, FALSE, FALSE, 0);
 
 		(*read_mem_data)();
@@ -1313,7 +1313,7 @@ create_meminfo_tab(GtkWidget *tab_vbox)
 				swap_chart.enabled, FALSE, FALSE, 0,
 				cb_swap_chart_enable, NULL,
 				_("Enable swap pages in/out chart"));
-	hbox = gtk_hbox_new(FALSE, 0);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_box_pack_start(GTK_BOX(vbox1), hbox, FALSE, TRUE, 5);
     gkrellm_gtk_check_button_connected(hbox, NULL,
 				swap.enabled, FALSE, FALSE, 0,
@@ -1327,7 +1327,7 @@ create_meminfo_tab(GtkWidget *tab_vbox)
 	vbox1 = gkrellm_gtk_category_vbox(vbox,
 				_("Memory"),
 				4, 0, TRUE);
-	hbox = gtk_hbox_new(FALSE, 0);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_box_pack_start(GTK_BOX(vbox1), hbox, FALSE, TRUE, 5);
     gkrellm_gtk_check_button_connected(hbox, NULL,
 				mem.enabled, FALSE, FALSE, 0,
@@ -1370,7 +1370,7 @@ create_meminfo_tab(GtkWidget *tab_vbox)
 	vbox1 = gkrellm_gtk_category_vbox(vbox,
 				_("Format String for Panel Labels"),
 				4, 6, TRUE);
-	hbox = gtk_hbox_new(FALSE, 0);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_box_pack_start(GTK_BOX(vbox1), hbox, FALSE, FALSE, 0);
 	mem_format_combo_box = gtk_combo_box_text_new_with_entry();
 	gtk_box_pack_start(GTK_BOX(hbox), mem_format_combo_box, TRUE, TRUE, 0);
@@ -1393,7 +1393,7 @@ create_meminfo_tab(GtkWidget *tab_vbox)
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
 	gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 4);
 
-	hbox = gtk_hbox_new(FALSE, 0);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_box_pack_start(GTK_BOX(vbox1), hbox, FALSE, FALSE, 0);
 	swap_format_combo_box = gtk_combo_box_text_new_with_entry();
 	gtk_box_pack_start(GTK_BOX(hbox), swap_format_combo_box, TRUE, TRUE, 0);

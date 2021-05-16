@@ -820,7 +820,7 @@ create_frame_top(GtkWidget *vbox)
 
 	if (!ft_vbox)
 		{
-		ft_vbox = gtk_vbox_new(FALSE, 0);
+		ft_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 		gtk_container_add(GTK_CONTAINER(vbox), ft_vbox);
 		gtk_widget_show(ft_vbox);
 
@@ -857,7 +857,7 @@ create_frame_bottom(GtkWidget *vbox)
 				&gtree.frame_bottom_pixmap, &gtree.frame_bottom_mask, w, h);
 	if (fb_vbox == NULL)
 		{
-		fb_vbox = gtk_vbox_new(FALSE, 0);
+		fb_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 		gtk_container_add(GTK_CONTAINER(vbox), fb_vbox);
 		gtk_widget_show(fb_vbox);
 
@@ -1513,42 +1513,42 @@ create_widget_tree()
 //	gtk_window_set_wmclass(GTK_WINDOW(gtree.window), title, "Gkrellm");
 	g_free(title);
 
-	gtree.vbox = gtk_vbox_new(FALSE, 0);
+	gtree.vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 	gtk_container_add(GTK_CONTAINER(gtree.window), gtree.vbox);
 
 	gtree.top0_event_box = gtk_event_box_new();
 	gtk_container_add(GTK_CONTAINER(gtree.vbox), gtree.top0_event_box);
-	gtree.top0_vbox = gtk_vbox_new(FALSE, 0);
+	gtree.top0_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 	gtk_container_add(GTK_CONTAINER(gtree.top0_event_box), gtree.top0_vbox);
 
 	/* The middle hbox has left frame, monitors & a right frame.
 	*/
-	gtree.middle_hbox = gtk_hbox_new(FALSE, 0);
+	gtree.middle_hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_container_add(GTK_CONTAINER(gtree.vbox), gtree.middle_hbox);
 
 	gtree.left_event_box = gtk_event_box_new();
 	gtk_container_add(GTK_CONTAINER(gtree.middle_hbox), gtree.left_event_box);
-	gtree.left_vbox = gtk_vbox_new(FALSE, 0);
+	gtree.left_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 	gtk_container_add(GTK_CONTAINER(gtree.left_event_box), gtree.left_vbox);
 
-	gtree.middle_vbox = gtk_vbox_new(FALSE, 0);
+	gtree.middle_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 	gtk_container_add(GTK_CONTAINER(gtree.middle_hbox), gtree.middle_vbox);
 
 	/* Hostname will go in an event box for moving gkrellm */
 	gtree.top1_event_box = gtk_event_box_new();
 	gtk_container_add(GTK_CONTAINER(gtree.middle_vbox), gtree.top1_event_box);
-	gtree.top1_vbox = gtk_vbox_new(FALSE, 0);
+	gtree.top1_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 	gtk_container_add(GTK_CONTAINER(gtree.top1_event_box), gtree.top1_vbox);
 
-	gtree.monitor_vbox = gtk_vbox_new(FALSE, 0);
+	gtree.monitor_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 	gtk_container_add(GTK_CONTAINER(gtree.middle_vbox), gtree.monitor_vbox);
 
 	gtree.right_event_box = gtk_event_box_new();
 	gtk_container_add(GTK_CONTAINER(gtree.middle_hbox), gtree.right_event_box);
-	gtree.right_vbox = gtk_vbox_new(FALSE, 0);
+	gtree.right_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 	gtk_container_add(GTK_CONTAINER(gtree.right_event_box), gtree.right_vbox);
 
-	gtree.bottom_vbox = gtk_vbox_new(FALSE, 0);
+	gtree.bottom_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 	gtk_container_add(GTK_CONTAINER(gtree.vbox), gtree.bottom_vbox);
 
 	gtk_widget_realize(gtree.window);
@@ -1953,10 +1953,10 @@ add_builtin(GkrellmMonitor *mon)
 		mon->privat = g_new0(GkrellmMonprivate, 1);
 	if (mon->create_monitor)
 		{
-		mon->privat->main_vbox = gtk_vbox_new(FALSE, 0);
-		mon->privat->top_spacer.vbox = gtk_vbox_new(FALSE, 0);
-		mon->privat->vbox = gtk_vbox_new(FALSE, 0);
-		mon->privat->bottom_spacer.vbox = gtk_vbox_new(FALSE, 0);
+		mon->privat->main_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+		mon->privat->top_spacer.vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+		mon->privat->vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+		mon->privat->bottom_spacer.vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 		}
 	mon->privat->enabled = TRUE;
 	}

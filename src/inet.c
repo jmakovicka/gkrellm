@@ -936,7 +936,7 @@ create_inet_monitor(GtkWidget *vbox1, InetMon *in, gint first_create)
 
 	if (first_create)
 		{
-		vbox = gtk_vbox_new(FALSE, 0);
+		vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 		gtk_container_add(GTK_CONTAINER(vbox1), vbox);
 		in->vbox = vbox;
 		in->chart_minute = gkrellm_chart_new0();
@@ -1909,12 +1909,12 @@ create_inet_tab(GtkWidget *tab_vbox)
 	gtk_widget_set_size_request(port1_1_entry, 32, -1);
 	gtk_table_attach_defaults(GTK_TABLE(table), port1_1_entry, 6, 7, 3, 4);
 
-	hbox = gtk_hbox_new(FALSE, 2);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 2);
 	gtk_table_attach_defaults(GTK_TABLE(table), hbox, 0, 3, 4, 5);
 	gkrellm_gtk_check_button(hbox, &data0_range_button, 0, TRUE, 0,
 		_("Port0 - Port1 is a range"));
 
-	hbox = gtk_hbox_new(FALSE, 2);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 2);
 	gtk_table_attach_defaults(GTK_TABLE(table), hbox, 4, 7, 4, 5);
 	gkrellm_gtk_check_button(hbox, &data1_range_button, 0, TRUE, 0,
 		_("Port0 - Port1 is a range"));

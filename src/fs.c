@@ -1278,11 +1278,11 @@ fs_create(GtkWidget *vbox, gint first_create)
 
 	if (fs_main_vbox == NULL)
 		{
-		fs_main_vbox = gtk_vbox_new(FALSE, 0);
+		fs_main_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 		gtk_box_pack_start(GTK_BOX(vbox), fs_main_vbox, FALSE, FALSE, 0);
 		gtk_widget_show(fs_main_vbox);
 
-		fs_secondary_vbox = gtk_vbox_new(FALSE, 0);
+		fs_secondary_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 		gtk_box_pack_start(GTK_BOX(vbox), fs_secondary_vbox, FALSE, FALSE, 0);
 		gtk_widget_show(fs_secondary_vbox);
 		secondary_monitors_shown = FALSE;
@@ -2275,7 +2275,7 @@ create_fs_panels_page(GtkWidget *vbox)
 	GList					*list;
 
 
-	hbox = gtk_hbox_new(FALSE, 0);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, FALSE, 0);
 	vbox1 = gkrellm_gtk_framed_vbox(hbox, NULL, 1, TRUE, 0, 2);
 
@@ -2308,9 +2308,9 @@ create_fs_panels_page(GtkWidget *vbox)
 	g_signal_connect(G_OBJECT(GTK_COMBO_BOX(dir_combo_box)),
 			"changed", G_CALLBACK(cb_combo_changed), NULL);
 
-	vbox1 = gtk_vbox_new(FALSE, 0);
+	vbox1 = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 	gtk_box_pack_start(GTK_BOX(hbox), vbox1, FALSE, FALSE, 0);
-	hbox = gtk_hbox_new(FALSE, 0);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_box_pack_start(GTK_BOX(vbox1), hbox, FALSE, FALSE, 0);
 
 	gkrellm_gtk_check_button_connected(hbox, &secondary_button, 0,
@@ -2333,7 +2333,7 @@ create_fs_panels_page(GtkWidget *vbox)
 			}
 		}
 
-	hbox = gtk_hbox_new(FALSE, 0);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, FALSE, 0);
 
 	if (ejecting_supported && !_GK.client_mode)
@@ -2346,7 +2346,7 @@ create_fs_panels_page(GtkWidget *vbox)
 
 		if (mounting_supported)
 			{
-			hbox1 = gtk_hbox_new(FALSE, 0);
+			hbox1 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 			gtk_box_pack_start(GTK_BOX(vbox1), hbox1, FALSE, FALSE, 0);
 			label = gtk_label_new(_("Device"));
 			gtk_box_pack_start(GTK_BOX(hbox1), label, FALSE, FALSE, 2);
@@ -2367,10 +2367,10 @@ create_fs_panels_page(GtkWidget *vbox)
 		gkrellm_gtk_config_launcher(table, 1, &umount_entry,
 					NULL, _("umount"), NULL);
 		}
-	hbox = gtk_hbox_new(FALSE, 2);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 2);
 	gtk_box_pack_start(GTK_BOX(vbox), hbox, TRUE, TRUE, 0);
 
-	vbox1 = gtk_vbox_new(FALSE, 0);
+	vbox1 = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 	gtk_box_pack_end(GTK_BOX(hbox), vbox1, FALSE, FALSE, 5);
 
 	gkrellm_gtk_button_connected(vbox1, &new_apply_button, FALSE, FALSE, 4,

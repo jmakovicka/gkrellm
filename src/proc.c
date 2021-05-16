@@ -926,21 +926,21 @@ create_proc_tab(GtkWidget *tab_vbox)
 					cb_sensor_separate, NULL,
 		_("Draw fan and temperature values separately (not alternating)."));
 
-	hbox = gtk_hbox_new(FALSE, 0);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_box_pack_end(GTK_BOX(vbox), hbox, FALSE, TRUE, 5);
 	gkrellm_gtk_alert_button(hbox, &processes_alert_button, FALSE, FALSE, 4,
 				TRUE, cb_processes_alert, NULL);
 	label = gtk_label_new(_("Processes"));
 	gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, TRUE, 4);
 
-	hbox = gtk_hbox_new(FALSE, 0);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_box_pack_end(GTK_BOX(vbox), hbox, FALSE, TRUE, 5);
 	gkrellm_gtk_alert_button(hbox, &users_alert_button, FALSE, FALSE, 4, TRUE,
 				cb_users_alert, NULL);
 	label = gtk_label_new(_("Users"));
 	gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, TRUE, 4);
 
-	hbox = gtk_hbox_new(FALSE, 0);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_box_pack_end(GTK_BOX(vbox), hbox, FALSE, TRUE, 5);
 	gkrellm_gtk_alert_button(hbox, &load_alert_button, FALSE, FALSE, 4, TRUE,
 				cb_load_alert, NULL);

@@ -842,7 +842,7 @@ create_disk(GtkWidget *vbox, gint first_create)
 		disk = (DiskMon *) list->data;
 		if (first_create)
 			{
-			disk->vbox = gtk_vbox_new(FALSE, 0);
+			disk->vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 			gtk_box_pack_start(GTK_BOX(vbox), disk->vbox, FALSE, FALSE, 0);
 			gtk_widget_show(disk->vbox);
 			}
@@ -873,7 +873,7 @@ check_for_new_disks(void)
 		disk = (DiskMon *) list->data;
 		if (disk->vbox == NULL)
 			{
-			disk->vbox = gtk_vbox_new(FALSE, 0);
+			disk->vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 			gtk_box_pack_start(GTK_BOX(disk_vbox), disk->vbox, FALSE, FALSE,0);
 			gtk_widget_show(disk->vbox);
 			gkrellm_setup_launcher(NULL, &disk->launch, CHART_PANEL_TYPE, 4);
@@ -1489,7 +1489,7 @@ create_disk_tab(GtkWidget *tab_vbox)
 	g_signal_connect(G_OBJECT(selection), "changed",
 				G_CALLBACK(cb_tree_selection_changed), NULL);
 
-	hbox = gtk_hbox_new(FALSE, 0);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, FALSE, 3);
 	gkrellm_gtk_alert_button(hbox, &alert_button, FALSE, FALSE, 4, FALSE,
 				cb_set_alert, NULL);

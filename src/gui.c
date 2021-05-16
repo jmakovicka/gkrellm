@@ -62,7 +62,7 @@ gkrellm_message_dialog(gchar *title, gchar *message)
 	gtk_window_set_wmclass(GTK_WINDOW(dialog),
 				"Gkrellm_dialog", "Gkrellm");
 
-	vbox = gtk_vbox_new(FALSE, 0);
+	vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 	gtk_container_set_border_width(GTK_CONTAINER(vbox), 8);
 	gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), vbox,
 				FALSE, FALSE, 0);
@@ -102,7 +102,7 @@ gkrellm_config_message_dialog(gchar *title, gchar *message)
 				NULL);
 	gtk_window_set_wmclass(GTK_WINDOW(dialog),
 				"Gkrellm_dialog", "Gkrellm");
-	vbox = gtk_vbox_new(FALSE, 0);
+	vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 	gtk_container_set_border_width(GTK_CONTAINER(vbox), 8);
 	gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), vbox,
 				FALSE, FALSE, 0);
@@ -383,7 +383,7 @@ gkrellm_gtk_config_launcher(GtkWidget *table, gint n, GtkWidget **launch_entry,
 	if (!table || !launch_entry)
 		return;
 	row = (tooltip_entry ? 2 : 1) * n;
-	hbox = gtk_hbox_new(FALSE, 0);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
     /* Attach left right top bottom */
     gtk_table_attach(GTK_TABLE(table), hbox, 0, 1, row, row + 1,
 				GTK_FILL, GTK_SHRINK, 0, 0);
@@ -402,7 +402,7 @@ gkrellm_gtk_config_launcher(GtkWidget *table, gint n, GtkWidget **launch_entry,
 
 	if (tooltip_entry)
 		{
-		hbox = gtk_hbox_new(FALSE, 0);
+		hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 	    gtk_table_attach(GTK_TABLE(table), hbox, 0, 1, row + 1, row + 2,
 					GTK_FILL, GTK_SHRINK, 0, 0);
 
@@ -546,7 +546,7 @@ gkrellm_gtk_alert_button(GtkWidget *box, GtkWidget **button,
 	GtkWidget	*b, *hbox;
 	GtkWidget	*image, *label;
 
-	hbox = gtk_hbox_new(FALSE, 0);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_container_set_border_width(GTK_CONTAINER(hbox), 2);
 	image = gtk_image_new_from_pixbuf(gkrellm_alert_pixbuf());
 	label = gtk_label_new(_("Alerts"));
@@ -629,7 +629,7 @@ gkrellm_gtk_scrolled_vbox(GtkWidget *box, GtkWidget **scr,
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolled),
 			h_policy, v_policy);
 	gtk_box_pack_start(GTK_BOX(box), scrolled, TRUE, TRUE, 0);
-	vbox = gtk_vbox_new(FALSE, 2);
+	vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 2);
 	gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(scrolled), vbox);
 	if (scr)
 		*scr = scrolled;
@@ -655,7 +655,7 @@ gkrellm_gtk_framed_vbox(GtkWidget *box, gchar *label, gint frame_border_width,
 
 	gtk_container_set_border_width(GTK_CONTAINER(frame), frame_border_width);
     gtk_box_pack_start(GTK_BOX(box), frame, frame_expand, frame_expand, 0);
-    vbox = gtk_vbox_new(FALSE, vbox_pad);
+    vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, vbox_pad);
     gtk_container_set_border_width(GTK_CONTAINER(vbox), vbox_border_width);
     gtk_container_add(GTK_CONTAINER(frame), vbox);
 	return vbox;
@@ -672,7 +672,7 @@ gkrellm_gtk_framed_vbox_end(GtkWidget *box, gchar *label,
 	frame = gtk_frame_new(label);
 	gtk_container_set_border_width(GTK_CONTAINER(frame), frame_border_width);
     gtk_box_pack_end(GTK_BOX(box), frame, frame_expand, frame_expand, 0);
-    vbox = gtk_vbox_new(FALSE, vbox_pad);
+    vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, vbox_pad);
     gtk_container_set_border_width(GTK_CONTAINER(vbox), vbox_border_width);
     gtk_container_add(GTK_CONTAINER(frame), vbox);
 	return vbox;
@@ -704,12 +704,12 @@ gkrellm_gtk_category_vbox(GtkWidget *box, gchar *category_header,
 		g_free(s);
 		}
 
-	hbox = gtk_hbox_new(FALSE, 0);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_box_pack_start(GTK_BOX(vbox), hbox, TRUE, TRUE, 0);
 
 	label = gtk_label_new("    ");
 	gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
-	vbox1 = gtk_vbox_new(FALSE, box_pad);
+	vbox1 = gtk_box_new(GTK_ORIENTATION_VERTICAL, box_pad);
 	gtk_box_pack_start(GTK_BOX(hbox), vbox1, TRUE, TRUE, 0);
 
 	/* Add some bottom pad */
@@ -725,7 +725,7 @@ gkrellm_gtk_notebook_page(GtkWidget *tabs, char *name)
 	GtkWidget	*label;
 	GtkWidget	*vbox;
 
-	vbox = gtk_vbox_new(FALSE, 0);
+	vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 	gtk_container_set_border_width(GTK_CONTAINER(vbox), 0);
 
 	label = gtk_label_new(name);
@@ -1061,7 +1061,7 @@ create_general_tab(GtkWidget *tab_vbox)
 
 /* --Options tab */
 	vbox = gkrellm_gtk_framed_notebook_page(tabs, _("Options"));
-	vbox1 = gtk_vbox_new(FALSE, 0);
+	vbox1 = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 	gtk_box_pack_start(GTK_BOX(vbox), vbox1, FALSE, FALSE, 0);
 	hbox = gtk_hbox_new (FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(vbox1), hbox, FALSE, FALSE, 0);
@@ -1103,7 +1103,7 @@ _("Make gkrellm a topmost window (restart gkrellm for this to take effect)."));
 
 	if (_GK.client_mode)
 		{
-		hbox = gtk_hbox_new(FALSE, 0);
+		hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 		gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, TRUE, 6);
 		gkrellm_gtk_alert_button(hbox, NULL, FALSE, FALSE, 4, TRUE,
 					gkrellm_gkrellmd_disconnect_cb, NULL);
@@ -1908,7 +1908,7 @@ create_theme_tab(GtkWidget *tabs_vbox)
 	vbox = gkrellm_gtk_framed_vbox(vbox, NULL, 2, TRUE, 10, 4);
 
 #if !defined(WIN32)
-	vbox1 = gtk_vbox_new(FALSE, 0);
+	vbox1 = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 	gkrellm_gtk_check_button_connected(vbox, &track_gtk_button,
 			_GK.track_gtk_theme_name, FALSE, FALSE, 0,
 			cb_track_gtk, vbox1,
@@ -1917,7 +1917,7 @@ create_theme_tab(GtkWidget *tabs_vbox)
 	gtk_box_pack_start(GTK_BOX(vbox), vbox1, FALSE, FALSE, 0);
 
 	vbox1 = gkrellm_gtk_category_vbox(vbox1, NULL, 0, 0, TRUE);
-	hbox = gtk_hbox_new(FALSE, 0);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_box_pack_start(GTK_BOX(vbox1), hbox, FALSE, FALSE, 0);
 	label = gtk_label_new(_("Default"));
 	gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
@@ -1944,7 +1944,7 @@ create_theme_tab(GtkWidget *tabs_vbox)
 	vbox1 = gkrellm_gtk_framed_vbox(vbox, NULL, 2, FALSE, 0, 2);
 
 	vbox2 = gkrellm_gtk_framed_vbox(vbox1, _("Large font"), 4, FALSE, 0, 3);
-	hbox = gtk_hbox_new(FALSE, 0);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, TRUE, 0);
 
 	large_font.entry = gtk_entry_new();
@@ -1958,7 +1958,7 @@ create_theme_tab(GtkWidget *tabs_vbox)
 			0, cb_font_dialog, &large_font, _("Browse"));
 
 	vbox2 = gkrellm_gtk_framed_vbox(vbox1, _("Normal font"), 4, FALSE, 0, 3);
-	hbox = gtk_hbox_new(FALSE, 0);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, TRUE, 0);
 	normal_font.entry = gtk_entry_new();
 	gtk_box_pack_start(GTK_BOX(hbox), normal_font.entry, TRUE, TRUE, 0);
@@ -1972,7 +1972,7 @@ create_theme_tab(GtkWidget *tabs_vbox)
 			_("Browse"));
 
 	vbox2 = gkrellm_gtk_framed_vbox(vbox1, _("Small font"), 4, FALSE, 0, 3);
-	hbox = gtk_hbox_new(FALSE, 0);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, TRUE, 0);
 	small_font.entry = gtk_entry_new();
 	gtk_box_pack_start(GTK_BOX(hbox), small_font.entry, TRUE, TRUE, 0);
@@ -2092,7 +2092,7 @@ create_config_page(GkrellmMonitor *mon, GtkTreeStore *tree, GtkTreeIter *iter,
 	GtkWidget	*vbox;
 	gint		page;
 
-	vbox = gtk_vbox_new(FALSE, 0);
+	vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 	gtk_notebook_append_page(notebook, vbox, NULL);
 	page = g_list_length(notebook->children) - 1;
 
@@ -2298,7 +2298,7 @@ create_config_window(void)
 					"Gkrellm_conf", "Gkrellm");
 	gtk_container_set_border_width(GTK_CONTAINER(config_window), 2);
 	
-	config_hbox = gtk_hbox_new(FALSE, 4);
+	config_hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 4);
 	gtk_container_add(GTK_CONTAINER(config_window), config_hbox);
 
 	scrolled = gtk_scrolled_window_new(NULL, NULL);
@@ -2306,7 +2306,7 @@ create_config_window(void)
 			GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 	gtk_box_pack_start(GTK_BOX(config_hbox), scrolled, FALSE, FALSE, 0);
 
-	main_vbox = gtk_vbox_new(FALSE, 4);
+	main_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 4);
 	gtk_box_pack_start(GTK_BOX(config_hbox), main_vbox, TRUE, TRUE, 0);
 
 	widget = gtk_notebook_new();

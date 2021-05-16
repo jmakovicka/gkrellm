@@ -1167,7 +1167,7 @@ gkrellm_alert_config_window(GkrellmAlert **ap)
 				"Gkrellm_conf", "Gkrellm");
 
 		gtk_container_set_border_width(GTK_CONTAINER(alert->config_window), 4);
-		main_vbox = gtk_vbox_new(FALSE, 0);
+		main_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 		gtk_container_add(GTK_CONTAINER(alert->config_window), main_vbox);
 
 		tabs = gtk_notebook_new();
@@ -1187,7 +1187,7 @@ gkrellm_alert_config_window(GkrellmAlert **ap)
 		vbox = gkrellm_gtk_framed_vbox(tab_vbox, title, 4, FALSE, 4, 3);
 		g_free(title);
 
-		hbox = gtk_hbox_new(FALSE, 0);
+		hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 		gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, FALSE, 0);
 		w = 70;
 		if (alert->max_high > 100000)
@@ -1336,7 +1336,7 @@ gkrellm_alert_config_window(GkrellmAlert **ap)
 			gtk_notebook_set_show_tabs(GTK_NOTEBOOK(tabs), FALSE);
 
 		alert->icon_box = gtk_event_box_new();
-		hbox1 = gtk_hbox_new(FALSE, 0);
+		hbox1 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 		gtk_box_pack_start(GTK_BOX(main_vbox), hbox1, FALSE, FALSE, 0);
 		gtk_box_pack_start(GTK_BOX(hbox1), alert->icon_box, TRUE, FALSE, 0);
 		image = gtk_image_new_from_pixbuf(gkrellm_alert_pixbuf());

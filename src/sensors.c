@@ -1581,15 +1581,15 @@ create_sensors(GtkWidget *vbox, gint first_create)
 		read_sensors_config();
 	if (first_create)
 		{
-		temp_vbox = gtk_vbox_new(FALSE, 0);
+		temp_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 		gtk_box_pack_start(GTK_BOX(vbox), temp_vbox, FALSE, FALSE, 0);
 		gtk_widget_show(temp_vbox);
 
-		fan_vbox = gtk_vbox_new(FALSE, 0);
+		fan_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 		gtk_box_pack_start(GTK_BOX(vbox), fan_vbox, FALSE, FALSE, 0);
 		gtk_widget_show(fan_vbox);
 
-		volt_vbox = gtk_vbox_new(FALSE, 0);
+		volt_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 		gtk_box_pack_start(GTK_BOX(vbox), volt_vbox, FALSE, FALSE, 0);
 		gtk_widget_show(volt_vbox);
 
@@ -2725,9 +2725,9 @@ create_sensors_tab(GtkWidget *tab_vbox)
 
 /* --Setup tab */
 	vbox = gkrellm_gtk_framed_notebook_page(tabs, _("Setup"));
-	hbox = gtk_hbox_new(FALSE, 2);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 2);
 	gtk_box_pack_start(GTK_BOX(vbox), hbox, TRUE, TRUE, 0);
-	vbox1 = gtk_vbox_new(FALSE, 0);
+	vbox1 = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 	gtk_box_pack_end(GTK_BOX(hbox), vbox1, FALSE, FALSE, 5);
 
 	scrolled = gtk_scrolled_window_new(NULL, NULL);
@@ -2802,7 +2802,7 @@ create_sensors_tab(GtkWidget *tab_vbox)
 
 	gtk_box_pack_start(GTK_BOX(box), optionmenu, FALSE, FALSE, 4);
 
-	box = gtk_hbox_new(FALSE, 0);
+	box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_container_set_border_width(GTK_CONTAINER(box), 2);
 	image = gtk_image_new_from_pixbuf(gkrellm_alert_pixbuf());
 	label = gtk_label_new(_("Alerts"));
@@ -2881,7 +2881,7 @@ create_sensors_tab(GtkWidget *tab_vbox)
 			_("<small>Daemon command must be: <b>mbmon -r -P port</b>\n"
 			 "where 'port' must match the port number entered here:</small>"));
 		gtk_box_pack_start(GTK_BOX(box), label, FALSE, FALSE, 0);
-		hbox = gtk_hbox_new(FALSE, 2);
+		hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 2);
 		gtk_box_pack_start(GTK_BOX(box), hbox, TRUE, TRUE, 0);
 		entry = gtk_entry_new();
 		gtk_entry_set_max_length(GTK_ENTRY(entry), 6);

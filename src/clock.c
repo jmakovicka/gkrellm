@@ -729,7 +729,7 @@ create_clock_tab(GtkWidget *tab_vbox)
 				cal_enable, FALSE, FALSE, 2,
 				cb_clock_cal, NULL,
 				_("Enable"));
-	hbox = gtk_hbox_new(FALSE, 0);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_box_pack_start(GTK_BOX(vbox1), hbox, FALSE, FALSE, 6);
 	label = gtk_label_new(_("Display format string:"));
 	gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 2);
@@ -748,7 +748,7 @@ create_clock_tab(GtkWidget *tab_vbox)
 				clock_enable, FALSE, FALSE, 6,
 				cb_clock_cal, NULL,
 				_("Enable"));
-	hbox = gtk_hbox_new(FALSE, 0);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_box_pack_start(GTK_BOX(vbox1), hbox, FALSE, FALSE, 6);
 	label = gtk_label_new(_("Display format string:"));
 	gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 2);

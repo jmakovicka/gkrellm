@@ -777,7 +777,7 @@ net_stats_window_show(NetMon *net)
 	gtk_window_set_default_size(GTK_WINDOW(stats_window),
 				-1, net_stats_window_height);
 
-	main_vbox = gtk_vbox_new(FALSE, 0);
+	main_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 	gtk_container_set_border_width(GTK_CONTAINER(main_vbox), 4);
 	gtk_container_add(GTK_CONTAINER(stats_window), main_vbox);
 
@@ -1556,7 +1556,7 @@ create_net_monitor(GtkWidget *vbox, NetMon *net, gint first_create)
 	if (first_create)
 		{
 		net->parent_vbox = vbox;
-		net->vbox = gtk_vbox_new(FALSE, 0);
+		net->vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 		gtk_box_pack_start(GTK_BOX(vbox), net->vbox, FALSE, FALSE, 0);
 
 		net->chart = gkrellm_chart_new0();
@@ -2382,11 +2382,11 @@ create_net(GtkWidget *vbox, gint first_create)
 	*/
 	if (first_create)
 		{
-		dynamic_net_vbox = gtk_vbox_new(FALSE, 0);
+		dynamic_net_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 		gtk_box_pack_start(GTK_BOX(vbox), dynamic_net_vbox, FALSE, FALSE, 0);
 		gtk_widget_show(dynamic_net_vbox);
 
-		net_vbox = gtk_vbox_new(FALSE, 0);
+		net_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 		gtk_box_pack_start(GTK_BOX(vbox), net_vbox, FALSE, FALSE, 0);
 		gtk_widget_show(net_vbox);
 
@@ -3113,7 +3113,7 @@ create_net_tab(GtkWidget *tab_vbox)
 	gtk_container_set_border_width(GTK_CONTAINER(hbox), 3);
 	gtk_box_pack_start(GTK_BOX(vbox), hbox, TRUE, TRUE, 0);
 
-	vbox1 = gtk_vbox_new(FALSE, 3);
+	vbox1 = gtk_box_new(GTK_ORIENTATION_VERTICAL, 3);
 	gtk_container_set_border_width(GTK_CONTAINER(vbox1), 3);
 	gtk_container_add(GTK_CONTAINER(hbox), vbox1);
 	label = gtk_label_new(_("Start Command"));
@@ -3124,7 +3124,7 @@ create_net_tab(GtkWidget *tab_vbox)
 	g_signal_connect(G_OBJECT(pon_entry),
 				"changed", G_CALLBACK(cb_pon_entry), NULL);
 
-	vbox1 = gtk_vbox_new(FALSE, 3);
+	vbox1 = gtk_box_new(GTK_ORIENTATION_VERTICAL, 3);
 	gtk_container_set_border_width(GTK_CONTAINER(vbox1), 3);
 	gtk_container_add(GTK_CONTAINER(hbox), vbox1);
 	label = gtk_label_new(_("Stop Command"));
@@ -3223,11 +3223,11 @@ create_net_tab(GtkWidget *tab_vbox)
 				4, 0, TRUE);
 	label = gtk_label_new(_("Space separated list of patterns.\n"));
 	gtk_label_set_justify(GTK_LABEL(label), GTK_JUSTIFY_LEFT);
-	hbox = gtk_hbox_new(FALSE, 0);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_box_pack_start(GTK_BOX(vbox1), hbox, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
 
-	hbox = gtk_hbox_new(FALSE, 0);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_box_pack_start(GTK_BOX(vbox1), hbox, FALSE, FALSE, 0);
 	net_ignore_entry = gtk_entry_new();
 	snprintf(buf, sizeof(buf), "%s", net_ignore_patterns);

@@ -432,7 +432,7 @@ gkrellm_panel_create(GtkWidget *vbox, GkrellmMonitor *mon, GkrellmPanel *p)
 
 	if (p->hbox == NULL)
 		{
-		hbox = gtk_hbox_new(FALSE, 0);
+		hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 		gtk_container_add (GTK_CONTAINER(vbox), hbox);
 		p->hbox = hbox;
 		p->drawing_area = gtk_drawing_area_new();

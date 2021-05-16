@@ -831,7 +831,7 @@ create_cpu(GtkWidget *vbox, gint first_create)
 			{
 			/* don't really need the cpu->vbox unless I start destroying...
 			*/
-			cpu->vbox = gtk_vbox_new(FALSE, 0);
+			cpu->vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 			gtk_container_add(GTK_CONTAINER(vbox), cpu->vbox);
 			gtk_widget_show(cpu->vbox);
 			cpu->chart = gkrellm_chart_new0();
@@ -1433,7 +1433,7 @@ create_cpu_tab(GtkWidget *tab_vbox)
 				_("Format String for Chart Labels"),
 				4, 0, TRUE);
 
-	hbox = gtk_hbox_new(FALSE, 0);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_box_pack_start(GTK_BOX(vbox1), hbox, FALSE, FALSE, 0);
 
 	text_format_combo_box = gtk_combo_box_text_new_with_entry();
@@ -1484,7 +1484,7 @@ create_cpu_tab(GtkWidget *tab_vbox)
 				G_CALLBACK(cb_launch_entry), cpu);
 		}
 
-	hbox = gtk_hbox_new(FALSE, 0);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_box_pack_end(GTK_BOX(vbox), hbox, FALSE, FALSE, 0);
 	gkrellm_gtk_alert_button(hbox, NULL, FALSE, FALSE, 4, TRUE,
 			cb_set_alert, NULL);

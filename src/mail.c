@@ -4000,7 +4000,7 @@ create_mail_tab(GtkWidget *tab_vbox)
 		g_signal_connect(G_OBJECT(mail_fetch_entry), "changed",
 					G_CALLBACK(cb_mail_fetch), GINT_TO_POINTER(0));
 
-		hbox = gtk_hbox_new(FALSE, 0);
+		hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 		gtk_table_attach_defaults(GTK_TABLE(table), hbox, 1, 2, 3, 4);
 		gkrellm_gtk_check_button_connected(hbox, NULL, fetch_check_is_local,
 					FALSE, FALSE, 3,
@@ -4018,13 +4018,13 @@ create_mail_tab(GtkWidget *tab_vbox)
 		label = gtk_label_new(_("Check local mailboxes every"));
 		gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
 		gtk_box_pack_start(GTK_BOX(hbox), label, TRUE, TRUE, 4);
-		hbox = gtk_hbox_new(FALSE, 0);
+		hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 		gtk_table_attach_defaults(GTK_TABLE(table), hbox, 1, 2, 5, 6);
 		gkrellm_gtk_spin_button(hbox, NULL,
 				(gfloat) local_check_timeout, 2.0, 100.0, 1.0, 5.0, 0, 60,
 				local_check_timeout_cb, NULL, FALSE, _("seconds"));
 		}
-	hbox = gtk_hbox_new(FALSE, 0);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_table_attach(GTK_TABLE(table), hbox, 0, 1, 6, 7,
 				GTK_SHRINK, GTK_SHRINK, 0, 0);
 	if (local_supported)
@@ -4033,7 +4033,7 @@ create_mail_tab(GtkWidget *tab_vbox)
 		label = gtk_label_new(_("Check mail every"));
 	gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
 	gtk_box_pack_start(GTK_BOX(hbox), label, TRUE, TRUE, 4);
-	hbox = gtk_hbox_new(FALSE, 0);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_table_attach_defaults(GTK_TABLE(table), hbox, 1, 2, 6, 7);
 	gkrellm_gtk_spin_button(hbox, NULL,
 			(gfloat) remote_check_timeout, 1.0, 60.0, 1.0, 5.0, 0, 60,
@@ -4042,7 +4042,7 @@ create_mail_tab(GtkWidget *tab_vbox)
 /* --Mailboxes tab */
 	vbox = gkrellm_gtk_framed_notebook_page(tabs, _("Mailboxes"));
 //	vbox1 = gkrellm_gtk_framed_vbox(vbox, NULL, 3, FALSE, 0, 3);
-	vbox1 = gtk_vbox_new(FALSE, 0);
+	vbox1 = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 	gtk_container_add(GTK_CONTAINER(vbox), vbox1);
 
 	account_notebook = gtk_notebook_new();
@@ -4052,9 +4052,9 @@ create_mail_tab(GtkWidget *tab_vbox)
 	/* Local mailbox account entry */
 	if (local_supported)
 		{
-		vbox1 = gtk_vbox_new(FALSE, 0);
+		vbox1 = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 		gtk_notebook_append_page(GTK_NOTEBOOK(account_notebook), vbox1, NULL);
-		hbox = gtk_hbox_new(FALSE, 2);
+		hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 2);
 		gtk_box_pack_start(GTK_BOX(vbox1), hbox, FALSE, FALSE, 0);
 		label = gtk_label_new(_("Path name:"));
 		gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
@@ -4144,7 +4144,7 @@ create_mail_tab(GtkWidget *tab_vbox)
 	gtk_table_attach_defaults(GTK_TABLE(table), port_entry, 3, 4, i, i+1);
 	gtk_widget_set_sensitive(port_entry, FALSE);
 
-	hbox1 = gtk_hbox_new(FALSE, 0);
+	hbox1 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_box_pack_start(GTK_BOX(vbox), hbox1, FALSE, FALSE, 0);
 	hbox = gtk_hbutton_box_new();
 	gtk_button_box_set_layout(GTK_BUTTON_BOX(hbox), GTK_BUTTONBOX_END);
@@ -4211,7 +4211,7 @@ create_mail_tab(GtkWidget *tab_vbox)
 	vbox1 = gkrellm_gtk_category_vbox(vbox,
 				_("Animation Select"),
 				4, 0, TRUE);
-	hbox = gtk_hbox_new(FALSE, 0);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_box_pack_start(GTK_BOX(vbox1), hbox, FALSE, FALSE, 0);
 
 	anim_button[0] = gtk_radio_button_new_with_label(NULL, _("None"));
