@@ -2348,25 +2348,25 @@ create_location_menu(gint group)
 		return;
 	sensor_last_group = group;
 
-	gtk_combo_box_append_text(GTK_COMBO_BOX(optionmenu), "default");
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(optionmenu), "default");
 
 	if (group == SENSOR_GROUP_MAINBOARD)
 		{
 		label = gkrellm_proc_get_sensor_panel_label();
 		if (label)
-			gtk_combo_box_append_text(GTK_COMBO_BOX(optionmenu), label);
+			gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(optionmenu), label);
 
 		n_cpus = gkrellm_smp_cpus() + 1;
 		for (n = 0; n < n_cpus; ++n)
 			{
 			label = gkrellm_cpu_get_sensor_panel_label(n);
 			if (label)
-				gtk_combo_box_append_text(GTK_COMBO_BOX(optionmenu), label);
+				gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(optionmenu), label);
 			}
 		}
 	else if (group == SENSOR_GROUP_DISK)
 		{
-		gtk_combo_box_append_text(GTK_COMBO_BOX(optionmenu), _("Disk"));
+		gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(optionmenu), _("Disk"));
 		}
 	g_signal_connect(G_OBJECT(optionmenu), "changed",
 				G_CALLBACK(cb_location_menu), NULL);
@@ -2799,7 +2799,7 @@ create_sensors_tab(GtkWidget *tab_vbox)
 
 	box = gkrellm_gtk_framed_vbox(vbox1, _("Location"), 2, FALSE, 0, 2);
 
-	optionmenu = gtk_combo_box_new_text();
+	optionmenu = gtk_combo_box_text_new();
 
 	gtk_box_pack_start(GTK_BOX(box), optionmenu, FALSE, FALSE, 4);
 

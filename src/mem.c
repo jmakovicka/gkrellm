@@ -1348,20 +1348,20 @@ create_meminfo_tab(GtkWidget *tab_vbox)
 	vbox1 = gkrellm_gtk_category_vbox(vbox,
 				_("Format String for Chart Labels"),
 				4, 0, TRUE);
-	text_format_combo_box = gtk_combo_box_entry_new_text();
+	text_format_combo_box = gtk_combo_box_text_new_with_entry();
 	gtk_box_pack_start(GTK_BOX(vbox1), text_format_combo_box, FALSE, FALSE, 2);
 
-	gtk_combo_box_append_text(GTK_COMBO_BOX(text_format_combo_box),
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(text_format_combo_box),
 		text_format);
-	gtk_combo_box_append_text(GTK_COMBO_BOX(text_format_combo_box),
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(text_format_combo_box),
 		DEFAULT_TEXT_FORMAT);
-	gtk_combo_box_append_text(GTK_COMBO_BOX(text_format_combo_box),
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(text_format_combo_box),
 		"$T\\C\\f$M");
-	gtk_combo_box_append_text(GTK_COMBO_BOX(text_format_combo_box),
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(text_format_combo_box),
 		"\\c\\f$M\\b$T");
-	gtk_combo_box_append_text(GTK_COMBO_BOX(text_format_combo_box),
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(text_format_combo_box),
 		"\\ww\\C\\f$M\\D2\\f\\ai\\.$i\\D1\\f\\ao\\.$o");
-	gtk_combo_box_append_text(GTK_COMBO_BOX(text_format_combo_box),
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(text_format_combo_box),
 		"\\ww\\C\\f$M\\D3\\f\\ai\\.$i\\D0\\f\\ao\\.$o");
 	gtk_combo_box_set_active(GTK_COMBO_BOX(text_format_combo_box), 0);
 	g_signal_connect(G_OBJECT(GTK_COMBO_BOX(text_format_combo_box)), "changed",
@@ -1372,17 +1372,17 @@ create_meminfo_tab(GtkWidget *tab_vbox)
 				4, 6, TRUE);
 	hbox = gtk_hbox_new(FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(vbox1), hbox, FALSE, FALSE, 0);
-	mem_format_combo_box = gtk_combo_box_entry_new_text();
+	mem_format_combo_box = gtk_combo_box_text_new_with_entry();
 	gtk_box_pack_start(GTK_BOX(hbox), mem_format_combo_box, TRUE, TRUE, 0);
-	gtk_combo_box_append_text(GTK_COMBO_BOX(mem_format_combo_box),
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(mem_format_combo_box),
 		mem.data_format);
-	gtk_combo_box_append_text(GTK_COMBO_BOX(mem_format_combo_box),
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(mem_format_combo_box),
 		DEFAULT_FORMAT);
-	gtk_combo_box_append_text(GTK_COMBO_BOX(mem_format_combo_box),
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(mem_format_combo_box),
 		_("$t - $u used"));
-	gtk_combo_box_append_text(GTK_COMBO_BOX(mem_format_combo_box),
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(mem_format_combo_box),
 		_("$t - $U"));
-	gtk_combo_box_append_text(GTK_COMBO_BOX(mem_format_combo_box),
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(mem_format_combo_box),
 		_("$t - $u used  $s sh  $b bf  $c ca"));
 	gtk_entry_set_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(mem_format_combo_box))),
 			mem.data_format);
@@ -1395,15 +1395,15 @@ create_meminfo_tab(GtkWidget *tab_vbox)
 
 	hbox = gtk_hbox_new(FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(vbox1), hbox, FALSE, FALSE, 0);
-	swap_format_combo_box = gtk_combo_box_entry_new_text();
+	swap_format_combo_box = gtk_combo_box_text_new_with_entry();
 	gtk_box_pack_start(GTK_BOX(hbox), swap_format_combo_box, TRUE, TRUE, 0);
-	gtk_combo_box_append_text(GTK_COMBO_BOX(swap_format_combo_box),
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(swap_format_combo_box),
 		swap.data_format);
-	gtk_combo_box_append_text(GTK_COMBO_BOX(swap_format_combo_box),
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(swap_format_combo_box),
 		DEFAULT_FORMAT);
-	gtk_combo_box_append_text(GTK_COMBO_BOX(swap_format_combo_box),
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(swap_format_combo_box),
 		_("$t - $u used"));
-	gtk_combo_box_append_text(GTK_COMBO_BOX(swap_format_combo_box),
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(swap_format_combo_box),
 		_("$t - $U"));
 	gtk_entry_set_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(swap_format_combo_box))),
 			swap.data_format);

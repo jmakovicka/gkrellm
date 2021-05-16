@@ -2023,15 +2023,15 @@ create_inet_tab(GtkWidget *tab_vbox)
 				_("Format String for Chart Labels"),
 				4, 0, TRUE);
 
-	text_format_combo_box = gtk_combo_box_entry_new_text();
+	text_format_combo_box = gtk_combo_box_text_new_with_entry();
 	gtk_box_pack_start(GTK_BOX(vbox1), text_format_combo_box, FALSE, FALSE, 2);
-	gtk_combo_box_append_text(GTK_COMBO_BOX(text_format_combo_box),
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(text_format_combo_box),
 			text_format);
-	gtk_combo_box_append_text(GTK_COMBO_BOX(text_format_combo_box),
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(text_format_combo_box),
 			DEFAULT_TEXT_FORMAT);
-	gtk_combo_box_append_text(GTK_COMBO_BOX(text_format_combo_box),
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(text_format_combo_box),
 			"\\r\\f $M\\t$a\\f $l\\N$A\\f $L");
-	gtk_combo_box_append_text(GTK_COMBO_BOX(text_format_combo_box),
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(text_format_combo_box),
 			"\\r\\f $M\\D1$a\\f $l\\D2$A\\f $L");
 	gtk_combo_box_set_active(GTK_COMBO_BOX(text_format_combo_box), 0);
 	g_signal_connect(G_OBJECT(GTK_COMBO_BOX(text_format_combo_box)), "changed",

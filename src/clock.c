@@ -733,12 +733,12 @@ create_clock_tab(GtkWidget *tab_vbox)
 	gtk_box_pack_start(GTK_BOX(vbox1), hbox, FALSE, FALSE, 6);
 	label = gtk_label_new(_("Display format string:"));
 	gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 2);
-	cal_format_combo_box = gtk_combo_box_entry_new_text();
+	cal_format_combo_box = gtk_combo_box_text_new_with_entry();
 	gtk_box_pack_start(GTK_BOX(vbox1), cal_format_combo_box, FALSE, FALSE, 0);
-	gtk_combo_box_append_text(GTK_COMBO_BOX(cal_format_combo_box), cal_format);
-	gtk_combo_box_append_text(GTK_COMBO_BOX(cal_format_combo_box), DEFAULT_CAL_FORMAT);
-	gtk_combo_box_append_text(GTK_COMBO_BOX(cal_format_combo_box), ALT1_CAL_FORMAT);
-	gtk_combo_box_append_text(GTK_COMBO_BOX(cal_format_combo_box), ALT2_CAL_FORMAT);
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(cal_format_combo_box), cal_format);
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(cal_format_combo_box), DEFAULT_CAL_FORMAT);
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(cal_format_combo_box), ALT1_CAL_FORMAT);
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(cal_format_combo_box), ALT2_CAL_FORMAT);
 	gtk_combo_box_set_active(GTK_COMBO_BOX(cal_format_combo_box), 0);
 	g_signal_connect(G_OBJECT(GTK_COMBO_BOX(cal_format_combo_box)), "changed",
 			G_CALLBACK(cal_format_cb), NULL);
@@ -752,12 +752,12 @@ create_clock_tab(GtkWidget *tab_vbox)
 	gtk_box_pack_start(GTK_BOX(vbox1), hbox, FALSE, FALSE, 6);
 	label = gtk_label_new(_("Display format string:"));
 	gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 2);
-	clock_format_combo_box = gtk_combo_box_entry_new_text();
+	clock_format_combo_box = gtk_combo_box_text_new_with_entry();
 	gtk_box_pack_start(GTK_BOX(vbox1), clock_format_combo_box, FALSE, FALSE, 0);
-	gtk_combo_box_append_text(GTK_COMBO_BOX(clock_format_combo_box), clock_format);
-	gtk_combo_box_append_text(GTK_COMBO_BOX(clock_format_combo_box), DEFAULT_CLOCK_FORMAT);
-	gtk_combo_box_append_text(GTK_COMBO_BOX(clock_format_combo_box), ALT1_CLOCK_FORMAT);
-	gtk_combo_box_append_text(GTK_COMBO_BOX(clock_format_combo_box), ALT2_CLOCK_FORMAT);
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(clock_format_combo_box), clock_format);
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(clock_format_combo_box), DEFAULT_CLOCK_FORMAT);
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(clock_format_combo_box), ALT1_CLOCK_FORMAT);
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(clock_format_combo_box), ALT2_CLOCK_FORMAT);
 	gtk_combo_box_set_active(GTK_COMBO_BOX(clock_format_combo_box), 0);
 	g_signal_connect(G_OBJECT(GTK_COMBO_BOX(clock_format_combo_box)), "changed",
 			G_CALLBACK(clock_format_cb), NULL);

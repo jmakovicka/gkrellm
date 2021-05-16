@@ -2297,11 +2297,11 @@ create_fs_panels_page(GtkWidget *vbox)
 #endif
 	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 1, 2,
 				GTK_SHRINK, GTK_SHRINK, 2, 1);
-	dir_combo_box = gtk_combo_box_entry_new_text();
+	dir_combo_box = gtk_combo_box_text_new_with_entry();
 	gtk_table_attach_defaults(GTK_TABLE(table), dir_combo_box, 1, 2, 1, 2);
 	for (list = fstab_list; list; list = list->next)
 		{
-		gtk_combo_box_append_text(GTK_COMBO_BOX(dir_combo_box),
+		gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(dir_combo_box),
 				((Mount *)list->data)->directory);
 		}
 	gtk_combo_box_set_active(GTK_COMBO_BOX(dir_combo_box), -1);
@@ -2569,12 +2569,12 @@ fs_tab_create(GtkWidget *tab_vbox)
 	vbox1 = gkrellm_gtk_category_vbox(vbox,
 				_("Format String for Panel Labels"),
 				4, 0, TRUE);
-	data_format_combo_box = gtk_combo_box_entry_new_text();
+	data_format_combo_box = gtk_combo_box_text_new_with_entry();
 	gtk_box_pack_start(GTK_BOX(vbox1), data_format_combo_box, FALSE, FALSE, 2);
-	gtk_combo_box_append_text(GTK_COMBO_BOX(data_format_combo_box), data_format);
-	gtk_combo_box_append_text(GTK_COMBO_BOX(data_format_combo_box), DEFAULT_DATA_FORMAT);
-	gtk_combo_box_append_text(GTK_COMBO_BOX(data_format_combo_box), ALT1_DATA_FORMAT);
-	gtk_combo_box_append_text(GTK_COMBO_BOX(data_format_combo_box), ALT2_DATA_FORMAT);
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(data_format_combo_box), data_format);
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(data_format_combo_box), DEFAULT_DATA_FORMAT);
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(data_format_combo_box), ALT1_DATA_FORMAT);
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(data_format_combo_box), ALT2_DATA_FORMAT);
 	gtk_combo_box_set_active(GTK_COMBO_BOX(data_format_combo_box), 0);
 	g_signal_connect(G_OBJECT(GTK_COMBO_BOX(data_format_combo_box)), "changed",
 			G_CALLBACK(cb_data_format), NULL);

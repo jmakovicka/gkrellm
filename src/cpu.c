@@ -1436,30 +1436,30 @@ create_cpu_tab(GtkWidget *tab_vbox)
 	hbox = gtk_hbox_new(FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(vbox1), hbox, FALSE, FALSE, 0);
 
-	text_format_combo_box = gtk_combo_box_entry_new_text();
+	text_format_combo_box = gtk_combo_box_text_new_with_entry();
 	gtk_box_pack_start(GTK_BOX(hbox), text_format_combo_box, TRUE, TRUE, 0);
-	gtk_combo_box_append_text(GTK_COMBO_BOX(text_format_combo_box),
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(text_format_combo_box),
 		text_format);
-	gtk_combo_box_append_text(GTK_COMBO_BOX(text_format_combo_box),
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(text_format_combo_box),
 		DEFAULT_TEXT_FORMAT);
-	gtk_combo_box_append_text(GTK_COMBO_BOX(text_format_combo_box),
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(text_format_combo_box),
 		_("\\f$L\\n$T"));
-	gtk_combo_box_append_text(GTK_COMBO_BOX(text_format_combo_box),
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(text_format_combo_box),
 		_("\\fu \\.$u\\n\\fs \\.$s"));
-	gtk_combo_box_append_text(GTK_COMBO_BOX(text_format_combo_box),
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(text_format_combo_box),
 		_("\\ww\\D2\\f\\au\\.$u\\D1\\f\\as\\.$s"));
-	gtk_combo_box_append_text(GTK_COMBO_BOX(text_format_combo_box),
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(text_format_combo_box),
 		_("\\ww\\D3\\f\\au\\.$u\\D0\\f\\as\\.$s"));
-	gtk_combo_box_append_text(GTK_COMBO_BOX(text_format_combo_box),
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(text_format_combo_box),
 		_("\\ww\\D2\\f\\au\\.$u\\D1\\f\\as\\.$s\\D3\\f\\r$L"));
-	gtk_combo_box_append_text(GTK_COMBO_BOX(text_format_combo_box),
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(text_format_combo_box),
 		_("\\ww\\D2\\f\\au\\.$u\\D1\\f\\as\\.$s\\D3\\f\\r$L"));
-	gtk_combo_box_append_text(GTK_COMBO_BOX(text_format_combo_box),
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(text_format_combo_box),
 		_("\\ww\\D3\\f$L\\n\\f\\as\\.$s\\n\\f\\au\\.$u"));
 
 	if (!nice_time_unsupported)
 		{
-		gtk_combo_box_append_text(GTK_COMBO_BOX(text_format_combo_box),
+		gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(text_format_combo_box),
 			"\\ww\\C\\f$L\\D5\\f\\an\\.$n\\D2\\f\\au\\.$u\\D1\\f\\as\\.$s");
 		}
 	gtk_combo_box_set_active(GTK_COMBO_BOX(text_format_combo_box), 0);
